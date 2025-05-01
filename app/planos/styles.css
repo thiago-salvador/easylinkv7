@@ -1,0 +1,137 @@
+/* Estilos para destacar o plano selecionado na página de comparação */
+.highlight-plan {
+    animation: pulse 3s infinite;
+    box-shadow: 0 0 0 0 rgba(0, 112, 243, 0.5);
+    position: relative;
+    z-index: 10;
+    transform: scale(1.03);
+    transition: transform 0.5s ease-out;
+}
+
+.highlight-plan::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    background: linear-gradient(to right, rgba(0, 112, 243, 0.1), rgba(0, 194, 174, 0.1));
+    border-radius: inherit;
+    z-index: -1;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 112, 243, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 0 12px rgba(0, 112, 243, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 112, 243, 0);
+    }
+}
+
+/* Efeitos de hover e transição */
+.comparison-table td,
+.plan-card {
+    transition: all 0.3s ease-out;
+}
+
+.plan-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Scroll suave */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Animações para elementos decorativos */
+@keyframes blob {
+    0% {
+        transform: translate(0px, 0px) scale(1);
+    }
+    33% {
+        transform: translate(30px, -30px) scale(1.1);
+    }
+    66% {
+        transform: translate(-20px, 20px) scale(0.9);
+    }
+    100% {
+        transform: translate(0px, 0px) scale(1);
+    }
+}
+
+.animate-blob {
+    animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+    animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+    animation-delay: 4s;
+}
+
+/* Estilo para detalhes dos planos */
+.price-tag {
+    background: linear-gradient(to right, #0070F3, #00C2AE);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Badges para recursos */
+.feature-available {
+    color: #10B981;
+    position: relative;
+}
+
+.feature-available::before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background-color: rgba(16, 185, 129, 0.1);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+}
+
+/* Estilos para versão mobile */
+@media (max-width: 768px) {
+  .highlight-plan {
+    transform: scale(1.02);
+  }
+}
+
+/* Estilos para itens de recursos nos cartões mobile */
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.feature-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.feature-value {
+  display: block;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.feature-text {
+  display: block;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
