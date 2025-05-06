@@ -1,0 +1,617 @@
+{
+  "common": {
+    "loading": "Carregando...",
+    "error": "Ocorreu um erro",
+    "notFound": "Página não encontrada",
+    "back": "Voltar",
+    "unknownError": "Erro desconhecido",
+    "recaptchaNotice": "Este site é protegido por reCAPTCHA e a Google",
+    "privacyPolicy": "Política de Privacidade",
+    "termsOfService": "Termos de Serviço",
+    "and": "e",
+    "apply": "se aplicam",
+    "save": "Salvar",
+    "saving": "Salvando...",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "deleting": "Excluindo...",
+    "edit": "Editar",
+    "view": "Visualizar",
+    "download": "Baixar",
+    "share": "Compartilhar",
+    "close": "Fechar",
+    "confirm": "Confirmar",
+    "next": "Próximo",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "all": "Todos",
+    "none": "Nenhum",
+    "yes": "Sim",
+    "no": "Não"
+  },
+  "auth": {
+    "signIn": "Entrar",
+    "signUp": "Cadastrar",
+    "signOut": "Sair",
+    "email": "Email",
+    "password": "Senha",
+    "forgotPassword": "Esqueceu a senha?",
+    "noAccount": "Não tem uma conta?",
+    "hasAccount": "Já tem uma conta?",
+    "login": "Entrar",
+    "signup": "Cadastrar",
+    "logout": "Sair",
+    "confirmPassword": "Confirmar senha",
+    "resetPassword": "Redefinir senha",
+    "continueWithGoogle": "Continuar com Google",
+    "orLoginWith": "Ou entre com",
+    "emailPlaceholder": "seu@email.com",
+    "loginFailed": "Falha no login",
+    "googleLoginError": "Erro ao tentar login com Google: {{message}}",
+    "signupSuccess": "Cadastro realizado com sucesso!",
+    "signupFailed": "Falha no cadastro",
+    "passwordsDoNotMatch": "As senhas não coincidem.",
+    "pleaseEnterName": "Por favor, insira o seu nome.",
+    "checkEmailForConfirmation": "Verifique o seu email para confirmar o registro!",
+    "name": "Nome",
+    "namePlaceholder": "Seu nome completo",
+    "passwordPlaceholder": "Pelo menos 6 caracteres",
+    "confirmPasswordPlaceholder": "Repita a senha",
+    "createAccount": "Criar Conta",
+    "orContinueWith": "Ou continue com",
+    "loginToYourAccount": "Entrar na sua Conta",
+    "createNewAccount": "Criar Nova Conta"
+  },
+  "home": {
+    "title": "Compartilhe seus arquivos com facilidade",
+    "subtitle": "Faça upload de seus arquivos e compartilhe-os com um link personalizado.",
+    "getStarted": "Começar agora",
+    "linkPlaceholder": "seu-link",
+    "domainSuffix": ".easylink.live",
+    "shareButton": "Compartilhe",
+    "imagesTab": "Imagens",
+    "clickHere": "Clique aqui",
+    "dragAndDrop": "ou arraste e solte um arquivo",
+    "supportedFormats": "PDF, PPT, Keynote, HTML ou ZIP (máx. 10MB)",
+    "inputPlaceholder": "nome-do-arquivo",
+    "generateLink": "Gerar Link",
+    "shareFile": "Compartilhar Arquivo",
+    "features": {
+      "upload": "Upload de arquivos",
+      "share": "Compartilhe com quem quiser",
+      "track": "Acompanhe estatísticas",
+      "customize": "Links personalizados"
+    }
+  },
+  "dashboard": {
+    "title": "Painel",
+    "files": "Meus arquivos",
+    "myFiles": "Meus Arquivos",
+    "upload": "Enviar arquivo",
+    "settings": "Configurações",
+    "analytics": "Estatísticas",
+    "help": "Ajuda",
+    "api": "API",
+    "upgrade": "Upgrade",
+    "filesCount": "{count} arquivos enviados",
+    "filesCountSingular": "1 arquivo enviado",
+    "noFilesFound": "Nenhum arquivo encontrado.",
+    "status": "Status",
+    "projectLink": "Projeto / Link",
+    "type": "Tipo",
+    "modified": "Modificado",
+    "actions": "Ações",
+    "active": "Ativo",
+    "copyLink": "Copiar Link",
+    "edit": "Editar",
+    "delete": "Deletar",
+    "confirmDelete": "Confirmar exclusão",
+    "deleteWarning": "Esta ação não pode ser desfeita. O arquivo será excluído permanentemente.",
+    "fileDeleted": "Arquivo excluído",
+    "fileDeletedSuccess": "O arquivo foi excluído com sucesso.",
+    "error": "Erro",
+    "errorDeletingFile": "Ocorreu um erro ao excluir o arquivo.",
+    "notImplemented": "Funcionalidade não implementada",
+    "editNotAvailable": "A edição de arquivos não está disponível no momento.",
+    "fileNotFound": "Arquivo não encontrado."
+  },
+  "pdfViewer": {
+    "loading": "Carregando documento...",
+    "error": "Falha ao carregar o documento PDF",
+    "page": "Página",
+    "of": "de",
+    "zoom": "Zoom"
+  },
+  "fileViewer": {
+    "download": "Baixar",
+    "open": "Abrir em nova aba",
+    "share": "Compartilhar"
+  },
+  "about": {
+    "title": "Sobre o EasyLink",
+    "subtitle": "A maneira mais fácil de compartilhar seus arquivos",
+    "description": "O EasyLink foi criado para simplificar o compartilhamento e visualização de arquivos. Nossa plataforma permite que você faça upload, compartilhe e visualize arquivos diretamente no navegador, tornando a colaboração mais fácil e eficiente.",
+    "mission": "Nossa Missão",
+    "missionText": "Fornecer uma maneira simples, segura e eficiente de compartilhar arquivos com qualquer pessoa, em qualquer lugar.",
+    "team": "Nossa Equipe",
+    "teamText": "Somos uma equipe dedicada de desenvolvedores e designers apaixonados por criar ferramentas que facilitam seu trabalho."
+  },
+  "contact": {
+    "title": "Contato",
+    "subtitle": "Adoraríamos ouvir você",
+    "description": "Tem perguntas, feedback ou precisa de suporte? Entre em contato conosco e responderemos o mais rápido possível.",
+    "form": {
+      "name": "Nome",
+      "email": "Email",
+      "subject": "Assunto",
+      "message": "Mensagem",
+      "send": "Enviar Mensagem"
+    },
+    "info": {
+      "title": "Informações de Contato",
+      "email": "suporte@easylink.com",
+      "phone": "+55 (11) 1234-5678",
+      "address": "Av. Paulista, 1000, São Paulo, SP, 01310-100"
+    }
+  },
+  "terms": {
+    "title": "Termos de Serviço",
+    "lastUpdated": "Última atualização: 6 de maio de 2025",
+    "introduction": "Bem-vindo ao EasyLink. Ao usar nossos serviços, você concorda com estes Termos de Serviço.",
+    "sections": {
+      "usage": {
+        "title": "1. Uso do Serviço",
+        "content": "O EasyLink fornece serviços de compartilhamento e visualização de arquivos. Você é responsável por todo o conteúdo que carrega e compartilha através da nossa plataforma."
+      },
+      "accounts": {
+        "title": "2. Contas",
+        "content": "Você é responsável por manter a segurança da sua conta e senha. O EasyLink não pode e não será responsável por qualquer perda ou dano resultante do seu não cumprimento desta obrigação de segurança."
+      },
+      "content": {
+        "title": "3. Conteúdo do Usuário",
+        "content": "Você mantém todos os direitos sobre seu conteúdo. Ao fazer upload de conteúdo para o EasyLink, você nos concede uma licença para hospedar e compartilhar esse conteúdo de acordo com suas configurações."
+      },
+      "prohibited": {
+        "title": "4. Conteúdo Proibido",
+        "content": "Você não pode usar o EasyLink para qualquer finalidade ilegal ou não autorizada. Você não deve violar nenhuma lei em sua jurisdição."
+      },
+      "termination": {
+        "title": "5. Encerramento",
+        "content": "O EasyLink pode encerrar ou suspender sua conta a qualquer momento, com ou sem motivo, sem aviso prévio ou responsabilidade."
+      },
+      "changes": {
+        "title": "6. Alterações nos Termos",
+        "content": "Reservamo-nos o direito de modificar estes termos a qualquer momento. Forneceremos aviso de alterações significativas nestes termos."
+      }
+    }
+  },
+  "fileUpload": {
+    "unsupportedFileType": "Tipo de arquivo não suportado.",
+    "fileTooLarge": "Arquivo muito grande (máx. {maxSize}MB).",
+    "fileSelectionError": "Erro ao tentar abrir a seleção de arquivos.",
+    "customLink": "Link personalizado (opcional)",
+    "urlPrefix": "easylink.live/",
+    "linkPlaceholder": "meu-link-legal",
+    "uploadButton": "Fazer upload",
+    "uploading": "Enviando..."
+  },
+  "rotatingWords": {
+    "documents": "Documentos",
+    "images": "Imagens",
+    "presentations": "Apresentações",
+    "videos": "Vídeos",
+    "files": "Arquivos",
+    "code": "Código",
+    "more": "Mais"
+  },
+  "howItWorks": {
+    "tagline": "É realmente simples...",
+    "title": "Como funciona",
+    "tryFree": "Experimente grátis",
+    "steps": {
+      "1": {
+        "title": "Upload",
+        "description": "Arraste e solte um arquivo HTML, ZIP, PDF, PPT ou Keynote."
+      },
+      "2": {
+        "title": "Personalize",
+        "description": "Digite um nome para o link ou deixe em branco para um link aleatório."
+      },
+      "3": {
+        "title": "Publique",
+        "description": "Publique e tenha um link compartilhável na hora!"
+      }
+    },
+    "videoFallback": "Seu navegador não suporta a tag de vídeo.",
+    "badge": {
+      "readyIn": "Pronto em",
+      "steps": "passos"
+    }
+  },
+  "features": {
+    "title": {
+      "part1": "O poder da web,",
+      "part2": "feito para você"
+    },
+    "learnMore": "Saiba mais",
+    "cards": {
+      "email": {
+        "title": "Capture emails",
+        "description": "Capture endereços de email dos visitantes para geração de leads"
+      },
+      "edit": {
+        "title": "Faça edições",
+        "description": "Edite seu conteúdo a qualquer momento, sem precisar fazer novo upload"
+      },
+      "password": {
+        "title": "Proteção com senha",
+        "description": "Proteja seu conteúdo com senha para controlar quem pode acessá-lo"
+      },
+      "qr": {
+        "title": "Gere códigos QR",
+        "description": "Crie códigos QR para compartilhar seu conteúdo facilmente no mundo físico"
+      }
+    }
+  },
+  "footer": {
+    "allRightsReserved": "Todos os direitos reservados",
+    "links": {
+      "products": "Produtos",
+      "about": "Sobre",
+      "blog": "Blog",
+      "contact": "Contato",
+      "privacy": "Privacidade",
+      "terms": "Termos"
+    }
+  },
+  "forYou": {
+    "title": {
+      "part1": "Soluções para",
+      "part2": "cada necessidade"
+    },
+    "viewExamples": "Ver exemplos",
+    "categories": {
+      "sales": {
+        "name": "Vendas & Marketing",
+        "title": "Compartilhe materiais de marketing e catálogos de produtos",
+        "description": "O EasyLink transformou a maneira como compartilhamos nossos catálogos e materiais de vendas.",
+        "author": "Mariana, Gerente de Marketing"
+      },
+      "designers": {
+        "name": "Designers",
+        "title": "Apresente seu portfólio e projetos de design",
+        "description": "Finalmente uma maneira elegante de compartilhar meus trabalhos com clientes sem complicações.",
+        "author": "Rafael, Designer Gráfico"
+      },
+      "developers": {
+        "name": "Desenvolvedores",
+        "title": "Compartilhe documentação e apresentações técnicas",
+        "description": "Uso o EasyLink para compartilhar documentação técnica com clientes de forma profissional.",
+        "author": "Carlos, Desenvolvedor Full-Stack"
+      },
+      "realestate": {
+        "name": "Imobiliário",
+        "title": "Crie catálogos de imóveis e tours virtuais",
+        "description": "Meus clientes adoram como apresento os imóveis através do EasyLink. É simples e elegante.",
+        "author": "Ana, Corretora de Imóveis"
+      },
+      "recruitment": {
+        "name": "Recrutamento",
+        "title": "Compartilhe vagas e materiais de onboarding",
+        "description": "Nosso processo de onboarding ficou muito mais eficiente com o EasyLink.",
+        "author": "Patrícia, Gerente de RH"
+      },
+      "hospitality": {
+        "name": "Hospitalidade",
+        "title": "Crie cardápios digitais e guias para hóspedes",
+        "description": "Nossos clientes adoram a facilidade de acessar nosso cardápio digital através do EasyLink.",
+        "author": "Roberto, Gerente de Restaurante"
+      },
+      "elearning": {
+        "name": "E-Learning & Publicações",
+        "title": "Distribua materiais educacionais e publicações para seus alunos",
+        "description": "Compartilhar materiais de curso nunca foi tão fácil e profissional.",
+        "author": "Fernando, Professor Universitário"
+      },
+      "finance": {
+        "name": "Crypto & Finanças",
+        "title": "Apresente relatórios financeiros e análises de mercado",
+        "description": "O EasyLink me permite compartilhar relatórios de investimento de forma rápida e profissional.",
+        "author": "Marcela, Analista Financeira"
+      },
+      "education": {
+        "name": "Estudantes",
+        "title": "Compartilhe trabalhos acadêmicos e projetos escolares",
+        "description": "Uso o EasyLink para entregar meus trabalhos de forma organizada e com visual profissional.",
+        "author": "Juliana, Estudante de Arquitetura"
+      }
+    }
+  },
+  "langSelector": {
+    "changeLang": "Mudar idioma",
+    "portuguese": "Português",
+    "english": "Inglês"
+  },
+  "header": {
+    "navLinks": {
+      "howItWorks": "Como Funciona",
+      "forYou": "Para Você",
+      "features": "Recursos",
+      "pricing": "Preços",
+      "faq": "FAQ"
+    },
+    "login": "Entrar",
+    "getStarted": "Comece Agora"
+  },
+  "pdf": {
+    "loading": "Carregando PDF...",
+    "error": "Erro ao carregar o PDF",
+    "viewer": "Visualizador de PDF",
+    "document": "Documento",
+    "of": "de",
+    "previousPage": "Página anterior",
+    "nextPage": "Próxima página",
+    "download": "Baixar PDF",
+    "openInNewTab": "Abrir em nova aba"
+  },
+  
+
+
+  "userNav": {
+    "defaultUser": "Utilizador",
+    "emailNotAvailable": "Email não disponível",
+    "manageAccount": "Gerenciar Conta",
+    "upgrade": "Upgrade",
+    "manageTeam": "Gerenciar Time",
+    "deleteAccount": "Deletar Conta",
+    "logout": "Deslogar"
+  },
+
+  "faq": {
+    "title": "Perguntas Frequentes",
+    "subtitle": "Encontre respostas para as dúvidas mais comuns sobre o EasyLink",
+    "notFound": "Não encontrou o que procurava?",
+    "contactSupport": "Entre em contato com nosso suporte",
+    "questions": {
+      "fileFormats": {
+        "question": "Quais tipos de formatos de arquivo vocês suportam?",
+        "answer": {
+          "intro": "O EasyLink suporta uma ampla variedade de formatos de arquivo, incluindo:",
+          "items": {
+            "html": "HTML, CSS e JavaScript para sites estáticos",
+            "zip": "Arquivos ZIP contendo seu site completo",
+            "documents": "PDFs, imagens (JPG, PNG, GIF, SVG) e outros documentos",
+            "presentations": "Apresentações e arquivos de design"
+          },
+          "conclusion": "Nossos planos pagos oferecem suporte para arquivos maiores e mais tipos de conteúdo."
+        }
+      },
+      "linkDuration": {
+        "question": "Por quanto tempo meu link ficará online no plano gratuito?",
+        "answer": "No plano gratuito, seu link permanecerá ativo por 7 dias. Após esse período, ele será automaticamente desativado. Para manter seus links ativos por mais tempo, recomendamos fazer upgrade para um de nossos planos pagos, que oferecem armazenamento permanente enquanto sua assinatura estiver ativa."
+      },
+      "wordpress": {
+        "question": "Vocês suportam WordPress ou CMS similares?",
+        "answer": "O EasyLink é otimizado para hospedar sites estáticos, não oferecemos suporte para WordPress ou outros CMS que requerem PHP ou bancos de dados. No entanto, se você exportar seu site WordPress como HTML estático (usando plugins como Simply Static), poderá hospedar esse conteúdo em nossa plataforma sem problemas."
+      },
+      "php": {
+        "question": "Vocês suportam PHP?",
+        "answer": "Não, atualmente o EasyLink não suporta PHP ou outras linguagens de servidor. Nossa plataforma é otimizada para conteúdo estático, incluindo HTML, CSS e JavaScript. Se você precisa de funcionalidades dinâmicas, recomendamos utilizar APIs e serviços serverless que podem ser integrados ao seu site estático."
+      },
+      "publicAccess": {
+        "question": "Meus links são acessíveis publicamente?",
+        "answer": "Por padrão, todos os links do EasyLink são acessíveis publicamente através da URL gerada. No entanto, nos planos Solo e Pro, oferecemos a opção de proteger seus links com senha, permitindo que você controle quem pode acessar seu conteúdo. Você também pode optar por não listar seu conteúdo em mecanismos de busca."
+      },
+      "ecommerce": {
+        "question": "Vocês suportam sites de e-commerce?",
+        "answer": "O EasyLink pode hospedar sites de e-commerce estáticos que utilizam serviços de terceiros para processamento de pagamentos, como Stripe, PayPal ou outras soluções de checkout. Você pode criar uma loja online usando frameworks como Next.js ou Gatsby com integrações de comércio headless como Shopify, Snipcart ou Commerce.js."
+      },
+      "support": {
+        "question": "Qual a maneira mais rápida de entrar em contato em caso de necessidade de ajuda?",
+        "answer": "A maneira mais rápida de obter ajuda é através do nosso chat de suporte disponível no site, que funciona em horário comercial (9h às 18h, de segunda a sexta). Você também pode enviar um e-mail para suporte@easylink.live e responderemos em até 24 horas. Clientes dos planos Pro têm acesso a suporte prioritário com tempo de resposta garantido de 4 horas."
+      },
+      "moneyBack": {
+        "question": "Como funciona a garantia de devolução do dinheiro em 7 dias?",
+        "answer": "Todos os nossos planos pagos vêm com uma garantia de devolução do dinheiro de 7 dias. Se você não estiver satisfeito com nosso serviço por qualquer motivo, basta entrar em contato com nossa equipe de suporte dentro de 7 dias após a compra, e processaremos o reembolso integral sem fazer perguntas. Observe que a garantia se aplica apenas à sua primeira assinatura, não a renovações."
+      },
+      "cancel": {
+        "question": "Posso cancelar a qualquer momento?",
+        "answer": "Sim, você pode cancelar sua assinatura a qualquer momento diretamente do seu painel de controle. Não há contratos de longo prazo ou taxas de cancelamento. Após o cancelamento, você continuará tendo acesso aos recursos do seu plano até o final do período de faturamento atual."
+      },
+      "afterCancel": {
+        "question": "O que acontece depois que eu cancelo?",
+        "answer": "Após o cancelamento, sua conta permanecerá ativa até o final do período de faturamento atual. Depois disso, sua conta será rebaixada para o plano gratuito, e quaisquer recursos que excedam os limites do plano gratuito ficarão inacessíveis. Seus projetos permanecerão em nosso sistema por 30 dias após o término da assinatura, dando a você tempo para fazer backup do seu conteúdo ou reativar sua assinatura se mudar de ideia."
+      }
+    }
+  },
+
+  "pricing": {
+    "choosePlan": "Escolha seu plano",
+    "title": "Preços transparentes",
+    "subtitle": "Encontre o plano perfeito para suas necessidades, sem surpresas",
+    "currency": {
+      "brl": "Real",
+      "usd": "Dólar"
+    },
+    "period": {
+      "month": "mês"
+    },
+    "free": "Grátis",
+    "mostPopular": "Mais Popular",
+    "included": "O que está incluído",
+    "additionalFeatures": "Recursos adicionais",
+    "moneyBackGuarantee": "Garantia de 14 dias ou seu dinheiro de volta",
+    "processing": "Processando",
+    "yearlyBilled": {
+      "free": {
+        "brl": "R$0 /ano",
+        "usd": "$0 /year"
+      },
+      "basic": {
+        "brl": "Cobrado R$300 /ano",
+        "usd": "Billed $60 /year"
+      },
+      "pro": {
+        "brl": "Cobrado R$780 /ano",
+        "usd": "Billed $156 /year"
+      },
+      "business": {
+        "brl": "Cobrado R$1.860 /ano",
+        "usd": "Billed $372 /year"
+      }
+    },
+    "plans": {
+      "free": {
+        "name": "Grátis",
+        "description": "Experimente e compartilhe um projeto rapidamente",
+        "cta": "Comece agora",
+        "features": {
+          "projects": "1 projeto ativo",
+          "uploadLimit": "3 MB limite de upload/projeto",
+          "pdfLimit": "(0.5mb limite de PDF)",
+          "visitors": "5.000 visitantes /mês"
+        }
+      },
+      "basic": {
+        "name": "Básico",
+        "description": "Perfeito para um único link profissional",
+        "cta": "Selecionar Básico",
+        "features": {
+          "projects": "1 projeto ativo",
+          "uploadLimit": "25 MB limite de upload/projeto",
+          "visitors": "10.000 visitantes /mês"
+        },
+        "additionalFeatures": {
+          "removeBranding": "Remover marca EasyLink",
+          "qrCodes": "Códigos QR",
+          "analytics": "Analytics integrado"
+        }
+      },
+      "pro": {
+        "name": "Pro",
+        "description": "Ótimo para indivíduos e pequenos projetos",
+        "cta": "Selecionar Pro",
+        "features": {
+          "projects": "5 projetos ativos",
+          "uploadLimit": "75 MB limite de upload/projeto",
+          "visitors": "100.000 visitantes /mês"
+        },
+        "additionalFeatures": {
+          "basicPlan": "Tudo no plano Básico",
+          "customDomains": "Domínios personalizados",
+          "editMode": "Modo de edição",
+          "passwordProtection": "Proteção com senha"
+        }
+      },
+      "business": {
+        "name": "Empresarial",
+        "description": "Para freelancers, agências e empresas",
+        "cta": "Selecionar Empresarial",
+        "features": {
+          "projects": "Projetos ativos ilimitados",
+          "uploadLimit": "10 GB limite de conta",
+          "visitors": "500.000 visitantes /mês"
+        },
+        "additionalFeatures": {
+          "proPlan": "Tudo no plano Pro",
+          "feedbackMode": "Modo de feedback",
+          "emailCapture": "Captura de emails",
+          "teamMembers": "Adicionar membros da equipe"
+        }
+      }
+    }
+  },
+  
+  "modals": {
+    "account": {
+      "title": "Conta",
+      "email": "Email",
+      "password": "Palavra-passe",
+      "setPassword": "Definir palavra-passe",
+      "currentPlan": "Plano Atual",
+      "free": "Gratuito",
+      "requiresUpgrade": "Requer upgrade",
+      "upgradeForMore": "Upgrade para mais",
+      "setPasswordNotImplemented": "Funcionalidade 'Definir Palavra-passe' ainda não implementada.",
+      "upgradeNotImplemented": "Funcionalidade 'Upgrade' ainda não implementada."
+    },
+    "editFile": {
+      "title": "Editar Arquivo",
+      "description": "Modifique as informações do seu arquivo",
+      "filename": "Nome do arquivo",
+      "customLink": "Link personalizado (opcional)",
+      "slugPlaceholder": "seu-link-personalizado",
+      "slugHelp": "Use apenas letras, números, hífens e underscores.",
+      "invalidSlug": "Link personalizado inválido. Use apenas letras, números, hífens e underscores.",
+      "updateError": "Erro ao atualizar arquivo.",
+      "success": "Arquivo atualizado",
+      "successDescription": "O arquivo foi atualizado com sucesso."
+    },
+    "upgrade": {
+      "title": "Escolha seu plano",
+      "description": "Selecione o plano que melhor atende às suas necessidades",
+      "loading": "Carregando suas informações...",
+      "selectPlan": "Selecione o plano que melhor atende às suas necessidades",
+      "mostPopular": "Mais Popular",
+      "currentPlan": "Plano Atual",
+      "processing": "Processando...",
+      "moneyBackGuarantee": "Garantia de devolução do dinheiro em 7 dias.",
+      "needLogin": "Você precisa estar logado para fazer upgrade."
+    },
+    "deleteAccount": {
+      "title": "Tem a certeza absoluta?",
+      "description": "Esta ação não pode ser desfeita. Isto eliminará permanentemente a sua conta e removerá todos os seus dados dos nossos servidores, incluindo todos os seus ficheiros e links.",
+      "cancel": "Cancelar",
+      "confirm": "Sim, deletar conta",
+      "error": "Ocorreu um erro ao tentar deletar a conta."
+    },
+    "team": {
+      "title": "Gerenciamento de Equipe",
+      "description": "Adicione membros à sua equipe e gerencie suas permissões",
+      "teamMembers": "Membros da Equipe",
+      "manageMembersDescription": "Gerencie quem tem acesso aos seus projetos e qual nível de permissão eles têm.",
+      "currentMembers": "Membros atuais ({{count}})",
+      "owner": "Dono",
+      "member": "Membro",
+      "cannotRemoveOwner": "Você não pode remover o dono",
+      "removeMember": "Remover membro",
+      "inviteNewMembers": "Convidar novos membros",
+      "sendInvites": "Envie convites para novos membros da equipe.",
+      "guestEmail": "Email do convidado",
+      "emailPlaceholder": "colaborador@exemplo.com",
+      "invite": "Convidar",
+      "memberLimit": "Limite de membros",
+      "memberLimitDescription": "Seu plano atual permite até {{limit}} membros (incluindo você). Faça upgrade para adicionar mais membros à sua equipe.",
+      "unlockTeamManagement": "Desbloqueie o Gerenciamento de Equipe",
+      "teamFeatureDescription": "O recurso de gerenciamento de equipe está disponível no plano Empresarial. Faça upgrade para adicionar membros à sua equipe e colaborar em projetos.",
+      "upgradeToBusinessPlan": "Fazer Upgrade para Empresarial",
+      "businessPlan": "Plano Empresarial",
+      "recommendedForTeams": "Recomendado para equipes",
+      "features": {
+        "unlimitedProjects": "Projetos ativos ilimitados",
+        "storageLimit": "10 GB limite de conta",
+        "monthlyVisitors": "500.000 visitantes /mês",
+        "everythingInPro": "Tudo no plano Pro",
+        "addTeamMembers": "Adicionar até 10 membros da equipe",
+        "feedbackMode": "Modo de feedback",
+        "emailCapture": "Captura de emails"
+      },
+      "total": "Total",
+      "monthly": "mensal",
+      "yearly": "anual",
+      "sevenDayGuarantee": "7 dias de garantia",
+      "processingPayment": "Processando pagamento...",
+      "upgradeNow": "Fazer Upgrade Agora",
+      "securePayment": "Pagamento seguro via Stripe",
+      "termsAgreement": "Ao continuar, você aceita nossos",
+      "terms": "Termos",
+      "privacy": "Privacidade",
+      "teamManagement": "Gerencie seu time",
+      "unlimitedProjects": "Projetos ilimitados",
+      "storage": "10 GB de armazenamento",
+      "unlimitedMembers": "Membros ilimitados",
+      "visits": "500k visitas/mês"
+    }
+  }
+}
