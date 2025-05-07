@@ -1,6 +1,14 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
+  reactStrictMode: true,
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '10mb',
+    },
+    // Prevent server-side rendering for client components
+    serverComponentsExternalPackages: ['react-i18next'],
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -14,6 +22,8 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: '10mb',
     },
+    // Prevent server-side rendering for client components
+    serverComponentsExternalPackages: ['react-i18next'],
   },
   // Configuração do Webpack
   webpack: (config, { isServer, dev }) => {
