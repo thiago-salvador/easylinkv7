@@ -1,14 +1,21 @@
 "use client"
 
+/**
+ * @deprecated Este componente está sendo substituído pelo VerticalPDFViewer, que oferece mais recursos
+ * e melhor desempenho. Use VerticalPDFViewer para novas implementações.
+ */
+
 import { useState } from "react"
-import { Document, Page, pdfjs } from "react-pdf"
+import { Document, Page } from "react-pdf"
 import "react-pdf/dist/esm/Page/AnnotationLayer.css"
 import "react-pdf/dist/esm/Page/TextLayer.css"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight, Download, ExternalLink } from "lucide-react"
+import { setupPdfWorker } from "@/lib/pdfWorker"
+import { useLanguage } from "@/lib/language-context"
 
-// Fixar a versão para 4.8.69 para evitar incompatibilidade entre API e Worker
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@4.8.69/build/pdf.worker.min.js`
+// Inicializar o worker do PDF.js usando a configuração centralizada
+setupPdfWorker()
 
 interface PDFViewerProps {
   fileUrl: string
@@ -16,6 +23,7 @@ interface PDFViewerProps {
 }
 
 export function PDFViewer({ fileUrl, fileName = "document.pdf" }: PDFViewerProps) {
+  const { t } = useLanguage();
   const [numPages, setNumPages] = useState<number | null>(null)
   const [pageNumber, setPageNumber] = useState(1)
 
@@ -36,22 +44,22 @@ export function PDFViewer({ fileUrl, fileName = "document.pdf" }: PDFViewerProps
         </div>
 
         <div className="flex items-center space-x-2">
-          <Button variant="ghost" size="icon" onClick={goToPrevPage} disabled={pageNumber <= 1}>
+          <Button variant="ghost" size="icon" onClick={goToPrevPage} disabled={pageNumber <= 1} aria-label={t('pdfViewer.previousPage')}>
             <ChevronLeft className="h-5 w-5" />
           </Button>
-          <Button variant="ghost" size="icon" onClick={goToNextPage} disabled={pageNumber >= numPages!}>
+          <Button variant="ghost" size="icon" onClick={goToNextPage} disabled={pageNumber >= numPages!} aria-label={t('pdfViewer.nextPage')}>
             <ChevronRight className="h-5 w-5" />
           </Button>
           <span className="text-sm">
-            {pageNumber || (numPages ? 1 : "--")} of {numPages || "--"}
+            {pageNumber || (numPages ? 1 : "--")} {t('pdfViewer.of')} {numPages || "--"}
           </span>
           <Button variant="ghost" size="icon" asChild>
-            <a href={fileUrl} download={fileName} target="_blank" rel="noopener noreferrer">
+            <a href={fileUrl} download={fileName} target="_blank" rel="noopener noreferrer" aria-label={t('pdfViewer.download')}>
               <Download className="h-5 w-5" />
             </a>
           </Button>
           <Button variant="ghost" size="icon" asChild>
-            <a href={fileUrl} target="_blank" rel="noopener noreferrer">
+            <a href={fileUrl} target="_blank" rel="noopener noreferrer" aria-label={t('pdfViewer.openInNewTab')}>
               <ExternalLink className="h-5 w-5" />
             </a>
           </Button>

@@ -5,6 +5,7 @@ import type React from "react"
 import { useState } from "react"
 import { ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useLanguage } from "@/lib/language-context"
 
 interface FaqItemProps {
   question: string
@@ -40,113 +41,94 @@ function FaqItem({ question, answer, initialOpen = false }: FaqItemProps) {
 }
 
 export function FaqSection() {
+  const { t } = useLanguage();
+  
   const faqs: FaqItemProps[] = [
     {
-      question: "Quais tipos de formatos de arquivo vocês suportam?",
+      question: t('faq.questions.fileFormats.question'),
       answer: (
         <>
-          <p>O EasyLink suporta uma ampla variedade de formatos de arquivo, incluindo:</p>
+          <p>{t('faq.questions.fileFormats.answer.intro')}</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>HTML, CSS e JavaScript para sites estáticos</li>
-            <li>Arquivos ZIP contendo seu site completo</li>
-            <li>PDFs, imagens (JPG, PNG, GIF, SVG) e outros documentos</li>
-            <li>Apresentações e arquivos de design</li>
+            <li>{t('faq.questions.fileFormats.answer.items.html')}</li>
+            <li>{t('faq.questions.fileFormats.answer.items.zip')}</li>
+            <li>{t('faq.questions.fileFormats.answer.items.documents')}</li>
+            <li>{t('faq.questions.fileFormats.answer.items.presentations')}</li>
           </ul>
-          <p className="mt-2">Nossos planos pagos oferecem suporte para arquivos maiores e mais tipos de conteúdo.</p>
+          <p className="mt-2">{t('faq.questions.fileFormats.answer.conclusion')}</p>
         </>
       ),
       initialOpen: true,
     },
     {
-      question: "Por quanto tempo meu link ficará online no plano gratuito?",
+      question: t('faq.questions.linkDuration.question'),
       answer: (
         <p>
-          No plano gratuito, seu link permanecerá ativo por 7 dias. Após esse período, ele será automaticamente
-          desativado. Para manter seus links ativos por mais tempo, recomendamos fazer upgrade para um de nossos planos
-          pagos, que oferecem armazenamento permanente enquanto sua assinatura estiver ativa.
+          {t('faq.questions.linkDuration.answer')}
         </p>
       ),
     },
     {
-      question: "Vocês suportam WordPress ou CMS similares?",
+      question: t('faq.questions.wordpress.question'),
       answer: (
         <p>
-          O EasyLink é otimizado para hospedar sites estáticos, não oferecemos suporte para WordPress ou outros CMS que
-          requerem PHP ou bancos de dados. No entanto, se você exportar seu site WordPress como HTML estático (usando
-          plugins como Simply Static), poderá hospedar esse conteúdo em nossa plataforma sem problemas.
+          {t('faq.questions.wordpress.answer')}
         </p>
       ),
     },
     {
-      question: "Vocês suportam PHP?",
+      question: t('faq.questions.php.question'),
       answer: (
         <p>
-          Não, atualmente o EasyLink não suporta PHP ou outras linguagens de servidor. Nossa plataforma é otimizada para
-          conteúdo estático, incluindo HTML, CSS e JavaScript. Se você precisa de funcionalidades dinâmicas,
-          recomendamos utilizar APIs e serviços serverless que podem ser integrados ao seu site estático.
+          {t('faq.questions.php.answer')}
         </p>
       ),
     },
     {
-      question: "Meus links são acessíveis publicamente?",
+      question: t('faq.questions.publicAccess.question'),
       answer: (
         <p>
-          Por padrão, todos os links do EasyLink são acessíveis publicamente através da URL gerada. No entanto, nos
-          planos Solo e Pro, oferecemos a opção de proteger seus links com senha, permitindo que você controle quem pode
-          acessar seu conteúdo. Você também pode optar por não listar seu conteúdo em mecanismos de busca.
+          {t('faq.questions.publicAccess.answer')}
         </p>
       ),
     },
     {
-      question: "Vocês suportam sites de e-commerce?",
+      question: t('faq.questions.ecommerce.question'),
       answer: (
         <p>
-          O EasyLink pode hospedar sites de e-commerce estáticos que utilizam serviços de terceiros para processamento
-          de pagamentos, como Stripe, PayPal ou outras soluções de checkout. Você pode criar uma loja online usando
-          frameworks como Next.js ou Gatsby com integrações de comércio headless como Shopify, Snipcart ou Commerce.js.
+          {t('faq.questions.ecommerce.answer')}
         </p>
       ),
     },
     {
-      question: "Qual a maneira mais rápida de entrar em contato em caso de necessidade de ajuda?",
+      question: t('faq.questions.support.question'),
       answer: (
         <p>
-          A maneira mais rápida de obter ajuda é através do nosso chat de suporte disponível no site, que funciona em
-          horário comercial (9h às 18h, de segunda a sexta). Você também pode enviar um e-mail para
-          suporte@easylink.live e responderemos em até 24 horas. Clientes dos planos Pro têm acesso a suporte
-          prioritário com tempo de resposta garantido de 4 horas.
+          {t('faq.questions.support.answer')}
         </p>
       ),
     },
     {
-      question: "Como funciona a garantia de devolução do dinheiro em 7 dias?",
+      question: t('faq.questions.moneyBack.question'),
       answer: (
         <p>
-          Todos os nossos planos pagos vêm com uma garantia de devolução do dinheiro de 7 dias. Se você não estiver
-          satisfeito com nosso serviço por qualquer motivo, basta entrar em contato com nossa equipe de suporte dentro
-          de 7 dias após a compra, e processaremos o reembolso integral sem fazer perguntas. Observe que a garantia se
-          aplica apenas à sua primeira assinatura, não a renovações.
+          {t('faq.questions.moneyBack.answer')}
         </p>
       ),
     },
     {
-      question: "Posso cancelar a qualquer momento?",
+      question: t('faq.questions.cancel.question'),
       answer: (
         <p>
-          Sim, você pode cancelar sua assinatura a qualquer momento diretamente do seu painel de controle. Não há
-          contratos de longo prazo ou taxas de cancelamento. Após o cancelamento, você continuará tendo acesso aos
-          recursos do seu plano até o final do período de faturamento atual.
+          {t('faq.questions.cancel.answer')}
         </p>
       ),
     },
     {
-      question: "O que acontece depois que eu cancelo?",
+      question: t('faq.questions.afterCancel.question'),
       answer: (
         <p>
-          Após o cancelamento, sua conta permanecerá ativa até o final do período de faturamento atual. Depois disso,
-          sua conta será rebaixada para o plano gratuito, e quaisquer recursos que excedam os limites do plano gratuito
-          ficarão inacessíveis. Seus projetos permanecerão em nosso sistema por 30 dias após o término da assinatura,
-          dando a você tempo para fazer backup do seu conteúdo ou reativar sua assinatura se mudar de ideia.
+          {t('faq.questions.afterCancel.answer')}
         </p>
       ),
     },
@@ -156,9 +138,9 @@ export function FaqSection() {
     <section className="py-12 md:py-16 w-full">
       <div className="container mx-auto px-4 max-w-5xl">
         <div className="text-center mb-10 animate-fadeIn">
-          <h2 className="text-2xl md:text-4xl font-bold text-[#333333] mb-4 tracking-tight">Perguntas Frequentes</h2>
+          <h2 className="text-2xl md:text-4xl font-bold text-[#333333] mb-4 tracking-tight">{t('faq.title')}</h2>
           <p className="text-lg text-[#777777] max-w-2xl mx-auto leading-relaxed">
-            Encontre respostas para as dúvidas mais comuns sobre o EasyLink
+            {t('faq.subtitle')}
           </p>
         </div>
 
@@ -173,9 +155,9 @@ export function FaqSection() {
 
           <div className="text-center mt-8">
             <p className="text-[#777777]">
-              Não encontrou o que procurava?{" "}
+              {t('faq.notFound')}{" "}
               <a href="#" className="text-[#0070F3] font-medium hover:underline transition-colors">
-                Entre em contato com nosso suporte
+                {t('faq.contactSupport')}
               </a>
             </p>
           </div>

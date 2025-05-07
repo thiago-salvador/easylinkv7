@@ -1,58 +1,57 @@
+// components/conditional-header.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Header } from "@/components/header";
 import { DashboardHeader } from "@/components/dashboard-header";
-import { createClient } from '@/utils/supabase/client';
 import type { User } from '@supabase/supabase-js';
+import { useLanguage } from "@/lib/language-context";
+import { useEffect, useState } from "react";
 
-export function ConditionalHeader() {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+interface ConditionalHeaderProps {
+  user: User | null; // Recebe o usuário obtido no RootLayout (Server Component)
+}
 
+/**
+ * ConditionalHeader - Componente que decide qual header mostrar baseado na rota e no estado de autenticação
+ * 
+ * Regras:
+ * 1. Rotas /view/* não mostram header
+ * 2. Usuários autenticados veem o DashboardHeader
+ * 3. Usuários não autenticados veem o Header padrão
+ */
+export function ConditionalHeader({ user }: ConditionalHeaderProps) {
+  const { t } = useLanguage();
+  const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+  
+  // Garantir que o componente só renderize no cliente para evitar problemas de hidratação
   useEffect(() => {
-    // Função para carregar o estado do usuário
-    const loadUserState = async () => {
-      try {
-        const supabase = createClient();
-        const { data: { session } } = await supabase.auth.getSession();
-        
-        // Atualiza o estado com o usuário, se houver uma sessão
-        if (session) {
-          setUser(session.user);
-        } else {
-          setUser(null);
-        }
-      } catch (error) {
-        console.error("Erro ao verificar autenticação:", error);
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    // Carregar o estado inicial
-    loadUserState();
-
-    // Configurar um listener para mudanças de autenticação
-    const supabase = createClient();
-    
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user || null);
-    });
-
-    // Limpar a inscrição quando o componente for desmontado
-    return () => {
-      subscription.unsubscribe();
-    };
+    setMounted(true);
   }, []);
-
-  // Durante o carregamento, não mostramos nenhum header
-  // Ou podemos mostrar um header padrão enquanto carrega, como o normal
-  if (loading) {
-    return <Header />;
+  
+  // Não renderizar nada durante a hidratação para evitar mismatch
+  if (!mounted) {
+    return null;
   }
 
-  // Depois de carregar, mostrar o header apropriado com base no estado de autenticação
-  return user ? <DashboardHeader user={user} /> : <Header />;
+  // Regra 1: Se estivermos em uma rota de visualização, não renderiza nenhum header
+  if (pathname?.startsWith('/view/')) {
+    return null;
+  }
+
+  // Regra 2: Para todas as outras rotas, decide qual header mostrar baseado na prop 'user'
+  try {
+    if (user) {
+      // Usuário está logado
+      return <DashboardHeader user={user} />;
+    } else {
+      // Usuário não está logado
+      return <Header />;
+    }
+  } catch (error) {
+    console.error("Error rendering header:", error);
+    // Em caso de erro, mostrar o header padrão como fallback
+    return <Header />;
+  }
 }

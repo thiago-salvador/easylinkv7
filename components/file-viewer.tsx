@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import dynamic from 'next/dynamic'; // Import dynamic para carregamento sob demanda
 import { HTMLViewer } from "@/components/html-viewer"; // HTMLViewer pode ser importado normalmente
 import { Loader2 } from "lucide-react";
@@ -49,6 +49,9 @@ interface FileViewerProps {
 }
 
 export function FileViewer({ fileId, fileType, fileUrl, fileName, isPremium = false }: FileViewerProps) {
+  // Referência para controlar o ciclo de vida do componente
+  const isMounted = useRef(true);
+  
   // Estado para carregar metadados do ficheiro (se não forem passados via props)
   const [isLoadingMetadata, setIsLoadingMetadata] = useState(!fileUrl || !fileType);
   // Estado para guardar os dados do ficheiro a exibir
@@ -56,29 +59,60 @@ export function FileViewer({ fileId, fileType, fileUrl, fileName, isPremium = fa
     fileUrl && fileType ? { url: fileUrl, type: fileType, name: fileName || "file" } : null
   );
   const [error, setError] = useState<string | null>(null);
+  
+  // Controle de ciclo de vida do componente
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   // Busca metadados do ficheiro se não forem fornecidos via props
   useEffect(() => {
     const fetchFileData = async () => {
+      // Verificar se o componente ainda está montado antes de atualizar o estado
+      if (!isMounted.current) return;
+      
       setIsLoadingMetadata(true);
       setError(null);
+      
       try {
         const response = await fetch(`/api/files/${fileId}`);
+        
+        // Verificar novamente se o componente ainda está montado
+        if (!isMounted.current) return;
+        
         if (!response.ok) {
           let errorMsg = `Erro ao buscar dados (${response.status})`;
-          try { const errorData = await response.json(); errorMsg = errorData.error || errorData.message || errorMsg; } catch (_) {}
+          try { 
+            const errorData = await response.json(); 
+            errorMsg = errorData.error || errorData.message || errorMsg; 
+          } catch (_) {}
           throw new Error(errorMsg);
         }
+        
         const data = await response.json();
+        
+        // Verificar novamente se o componente ainda está montado
+        if (!isMounted.current) return;
+        
         if (!data.url || !data.fileType || !data.fileName) {
            throw new Error("Dados da API incompletos para o ficheiro.");
         }
+        
         setDisplayData({ url: data.url, type: data.fileType, name: data.fileName });
       } catch (err: any) {
-        console.error("FileViewer: Erro ao buscar metadados do ficheiro:", err); // Manter log de erro real
+        // Verificar se o componente ainda está montado antes de atualizar o estado de erro
+        if (!isMounted.current) return;
+        
+        console.error("FileViewer: Erro ao buscar metadados do ficheiro:", err);
         setError(err.message || "Erro ao carregar informações do ficheiro.");
       } finally {
-        setIsLoadingMetadata(false);
+        // Verificar se o componente ainda está montado antes de atualizar o estado de carregamento
+        if (isMounted.current) {
+          setIsLoadingMetadata(false);
+        }
       }
     };
 
@@ -86,10 +120,18 @@ export function FileViewer({ fileId, fileType, fileUrl, fileName, isPremium = fa
         if (fileId) {
             fetchFileData();
         } else {
-            setError("ID do ficheiro não fornecido.");
-            setIsLoadingMetadata(false);
+            // Verificar se o componente ainda está montado
+            if (isMounted.current) {
+              setError("ID do ficheiro não fornecido.");
+              setIsLoadingMetadata(false);
+            }
         }
     }
+    
+    // Cleanup function para cancelar qualquer operação pendente
+    return () => {
+      // A referência isMounted.current já será definida como false no cleanup do useEffect principal
+    };
   }, [fileId, fileUrl, fileType]); // Dependências para re-executar o fetch
 
   // --- Lógica de Renderização ---
@@ -139,7 +181,20 @@ export function FileViewer({ fileId, fileType, fileUrl, fileName, isPremium = fa
 
   // HTML
   if (lowerCaseType.includes("html")) {
-    return <HTMLViewer fileUrl={displayData.url} fileName={displayData.name} isPremium={isPremium} />;
+    // Usando uma chave única para forçar a recriação completa do componente quando os dados mudam
+    // Isso evita problemas de manipulação do DOM durante a atualização
+    return (
+      <div key={`html-viewer-${fileId}-${Date.now()}`} className="h-full w-full overflow-hidden">
+        {/* Verificando se estamos no cliente antes de renderizar o HTMLViewer */}
+        {typeof window !== 'undefined' && (
+          <HTMLViewer 
+            fileUrl={displayData.url} 
+            fileName={displayData.name} 
+            isPremium={isPremium} 
+          />
+        )}
+      </div>
+    );
   }
 
   // Fallback para outros tipos (ex: ZIP) -> Oferecer Download

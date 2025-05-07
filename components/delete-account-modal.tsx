@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Loader2, AlertTriangle } from "lucide-react";
+import { useLanguage } from "@/lib/language-context";
 
 interface DeleteAccountModalProps {
   open: boolean;
@@ -23,6 +24,7 @@ interface DeleteAccountModalProps {
 }
 
 export function DeleteAccountModal({ open, onOpenChange, onConfirmDelete }: DeleteAccountModalProps) {
+  const { t } = useLanguage();
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -35,7 +37,7 @@ export function DeleteAccountModal({ open, onOpenChange, onConfirmDelete }: Dele
       // onOpenChange(false); // Fecha o modal (pode ser feito pelo componente pai)
     } catch (err: any) {
       console.error("Erro ao deletar conta:", err);
-      setError(err.message || "Ocorreu um erro ao tentar deletar a conta.");
+      setError(err.message || t('modals.deleteAccount.error'));
     } finally {
       setIsDeleting(false);
     }
@@ -48,23 +50,22 @@ export function DeleteAccountModal({ open, onOpenChange, onConfirmDelete }: Dele
         <AlertDialogHeader>
           <AlertDialogTitle className="flex items-center gap-2">
              <AlertTriangle className="h-5 w-5 text-destructive" />
-             Tem a certeza absoluta?
+             {t('modals.deleteAccount.title')}
           </AlertDialogTitle>
           <AlertDialogDescription>
-            Esta ação não pode ser desfeita. Isto eliminará permanentemente a sua conta
-            e removerá todos os seus dados dos nossos servidores, incluindo todos os seus ficheiros e links.
+            {t('modals.deleteAccount.description')}
           </AlertDialogDescription>
         </AlertDialogHeader>
         {error && <p className="text-sm text-red-600 mt-2">{error}</p>}
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isDeleting}>Cancelar</AlertDialogCancel>
+          <AlertDialogCancel disabled={isDeleting}>{t('modals.deleteAccount.cancel')}</AlertDialogCancel>
           <AlertDialogAction
             onClick={handleDelete}
             disabled={isDeleting}
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90" // Estilo destrutivo
           >
             {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-            Sim, deletar conta
+            {t('modals.deleteAccount.confirm')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

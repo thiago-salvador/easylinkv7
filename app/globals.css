@@ -3,6 +3,24 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Garantir que o conteúdo seja visível mesmo durante o carregamento das fontes */
+.fonts-loaded {
+  visibility: visible;
+}
+
+/* Evitar flash de conteúdo não estilizado */
+html {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Estilos para garantir que os componentes sejam exibidos corretamente */
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 /* O resto do seu CSS continua abaixo */
 @layer base {
   :root {

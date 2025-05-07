@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button"
 import { Menu, X, ArrowRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { usePathname } from 'next/navigation' // Importa o hook para obter o caminho atual
+import { SimpleLanguageSelector } from "@/components/simple-language-selector" // Importa o novo seletor de idioma
+import { useLanguage } from "@/lib/language-context" // Importa o hook de internacionalização
 
 // Interface para os links de navegação
 interface NavLink {
@@ -15,18 +17,22 @@ interface NavLink {
   sectionId: string; // ID da seção na página inicial
 }
 
-const navLinks: NavLink[] = [
-  { label: "Como Funciona", sectionId: "como-funciona" },
-  { label: "Para Você", sectionId: "para-voce" },
-  { label: "Recursos", sectionId: "recursos" },
-  { label: "Preços", sectionId: "precos" },
-  { label: "FAQ", sectionId: "faq" },
-];
+// Os links de navegação serão criados dinamicamente com base nas traduções
 
 export function Header() {
+  const { t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname() // Obtém o caminho atual da URL
+  
+  // Criar links de navegação com base nas traduções
+  const navLinks: NavLink[] = [
+    { label: t('header.navLinks.howItWorks'), sectionId: "como-funciona" },
+    { label: t('header.navLinks.forYou'), sectionId: "para-voce" },
+    { label: t('header.navLinks.features'), sectionId: "recursos" },
+    { label: t('header.navLinks.pricing'), sectionId: "precos" },
+    { label: t('header.navLinks.faq'), sectionId: "faq" },
+  ];
 
   const isHomePage = pathname === '/'; // Verifica se estamos na página inicial
 
@@ -115,15 +121,17 @@ export function Header() {
         <div className="flex items-center gap-3">
           {/* Botões de Autenticação Desktop */}
           <div className="hidden md:flex items-center gap-3">
+            {/* Seletor de Idioma */}
+            <SimpleLanguageSelector />
             <Link href="/login" passHref legacyBehavior>
               <Button asChild variant="outline" className="rounded-full text-sm font-medium bg-black text-white border-black hover:bg-black/90 hover:text-white shadow-sm transition-all duration-300 hover:shadow-md">
-                <a>Entrar</a>
+                <a>{t('header.login')}</a>
               </Button>
             </Link>
             <Link href="/signup" passHref legacyBehavior>
                <Button asChild className="rounded-full text-sm font-medium bg-gradient-to-r from-[#0070F3] to-[#00C2AE] hover:shadow-button hover:shadow-[#0070F3]/20 transition-all duration-300 group shadow-sm">
                  <a>
-                   Cadastre-se grátis
+                   {t('header.getStarted')}
                    <ArrowRight className="ml-1 h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
                  </a>
                </Button>
@@ -156,15 +164,19 @@ export function Header() {
 
           {/* Botões de Autenticação Mobile */}
           <div className="flex flex-col gap-3 mt-4">
+            {/* Seletor de Idioma (Mobile) */}
+            <div className="flex justify-center mb-2">
+              <SimpleLanguageSelector />
+            </div>
              <Link href="/login" passHref legacyBehavior>
                 <Button asChild variant="outline" className="w-full rounded-full text-sm font-medium bg-black text-white border-black hover:bg-black/90 hover:text-white" onClick={() => setMobileMenuOpen(false)}>
-                  <a>Entrar</a>
+                  <a>{t('header.login')}</a>
                 </Button>
              </Link>
              <Link href="/signup" passHref legacyBehavior>
                 <Button asChild className="w-full rounded-full text-sm font-medium bg-gradient-to-r from-[#0070F3] to-[#00C2AE] hover:shadow-lg hover:shadow-[#0070F3]/20 transition-all duration-300 group" onClick={() => setMobileMenuOpen(false)}>
                   <a>
-                    Cadastre-se grátis
+                    {t('header.getStarted')}
                     <ArrowRight className="ml-1 h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
                   </a>
                 </Button>

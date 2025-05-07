@@ -18,61 +18,95 @@ interface DashboardHeaderProps {
 export function DashboardHeader({ user }: DashboardHeaderProps) {
   const pathname = usePathname(); // Opcional: para estilizar link ativo
   const { t } = useLanguage(); // Hook de idioma
-
-  return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center">
-        {/* Logo e Links Principais */}
-        <div className="mr-4 hidden md:flex">
-          <Link href="/dashboard" className="mr-6 flex items-center space-x-2">
+  
+  // Verificação de segurança para evitar erros de renderização
+  if (!user) {
+    console.warn("DashboardHeader: Tentativa de renderizar sem usuário válido");
+    // Renderizar uma versão simplificada do header para evitar erros
+    return (
+      <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-14 items-center justify-between">
+          <Link href="/" className="flex items-center space-x-2">
             <Logo className="h-6 w-6" />
-            <span className="hidden font-bold sm:inline-block text-gradient">
-              EasyLink
-            </span>
+            <span className="font-bold text-gradient">EasyLink</span>
           </Link>
-          <nav className="flex items-center space-x-6 text-sm font-medium">
-            <Link
-              href="/dashboard"
-              className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1"
-            >
-              <FileText className="h-4 w-4" />
-              {t('dashboard.myFiles')}
-            </Link>
-            <Link
-              href="/ajuda" // Defina a rota correta
-              className="transition-colors hover:text-foreground/80 text-foreground/60"
-            >
-              {t('dashboard.help')}
-            </Link>
-            <Link
-              href="/api-docs" // Defina a rota correta
-              className="transition-colors hover:text-foreground/80 text-foreground/60"
-            >
-              {t('dashboard.api')}
-            </Link>
-             {/* Link de Upgrade pode ser diferente ou removido se estiver no dropdown */}
-             <Link
-              href="/upgrade" // Defina a rota correta
-              className="transition-colors hover:text-foreground/80 text-foreground/60"
-            >
-              {t('dashboard.upgrade')}
-            </Link>
-          </nav>
+          <SimpleLanguageSelector />
         </div>
+      </header>
+    );
+  }
 
-        {/* Espaçador e Controles da Direita */}
-        <div className="flex flex-1 items-center justify-end space-x-4">
-           {/* Seletor de Idioma */}
-           <SimpleLanguageSelector />
-           
-           {/* Botão de Upgrade (alternativa ou redundante ao link) */}
-           {/* <Button size="sm">Upgrade</Button> */}
+  // Renderização normal quando o usuário está disponível
+  try {
+    return (
+      <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-14 items-center">
+          {/* Logo e Links Principais */}
+          <div className="mr-4 hidden md:flex">
+            <Link href="/dashboard" className="mr-6 flex items-center space-x-2">
+              <Logo className="h-6 w-6" />
+              <span className="hidden font-bold sm:inline-block text-gradient">
+                EasyLink
+              </span>
+            </Link>
+            <nav className="flex items-center space-x-6 text-sm font-medium">
+              <Link
+                href="/dashboard"
+                className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center gap-1"
+              >
+                <FileText className="h-4 w-4" />
+                {t('dashboard.myFiles')}
+              </Link>
+              <Link
+                href="/ajuda" // Defina a rota correta
+                className="transition-colors hover:text-foreground/80 text-foreground/60"
+              >
+                {t('dashboard.help')}
+              </Link>
+              <Link
+                href="/api-docs" // Defina a rota correta
+                className="transition-colors hover:text-foreground/80 text-foreground/60"
+              >
+                {t('dashboard.api')}
+              </Link>
+               {/* Link de Upgrade pode ser diferente ou removido se estiver no dropdown */}
+               <Link
+                href="/upgrade" // Defina a rota correta
+                className="transition-colors hover:text-foreground/80 text-foreground/60"
+              >
+                {t('dashboard.upgrade')}
+              </Link>
+            </nav>
+          </div>
 
-           {/* Dropdown da Conta do Utilizador */}
-           <UserNav user={user} />
+          {/* Espaçador e Controles da Direita */}
+          <div className="flex flex-1 items-center justify-end space-x-4">
+             {/* Seletor de Idioma */}
+             <SimpleLanguageSelector />
+             
+             {/* Botão de Upgrade (alternativa ou redundante ao link) */}
+             {/* <Button size="sm">Upgrade</Button> */}
+
+             {/* Dropdown da Conta do Utilizador */}
+             <UserNav user={user} />
+          </div>
         </div>
-      </div>
-    </header>
-  );
+      </header>
+    );
+  } catch (error) {
+    console.error("Erro ao renderizar DashboardHeader:", error);
+    // Fallback em caso de erro
+    return (
+      <header className="sticky top-0 z-40 w-full border-b bg-background/95">
+        <div className="container flex h-14 items-center justify-between">
+          <Link href="/" className="flex items-center space-x-2">
+            <Logo className="h-6 w-6" />
+            <span className="font-bold">EasyLink</span>
+          </Link>
+          <SimpleLanguageSelector />
+        </div>
+      </header>
+    );
+  }
 }
 

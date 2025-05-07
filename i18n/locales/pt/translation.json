@@ -30,6 +30,7 @@
     "yes": "Sim",
     "no": "Não"
   },
+
   "auth": {
     "signIn": "Entrar",
     "signUp": "Cadastrar",
@@ -121,7 +122,20 @@
     "error": "Falha ao carregar o documento PDF",
     "page": "Página",
     "of": "de",
-    "zoom": "Zoom"
+    "zoom": "Zoom",
+    "zoomIn": "Aumentar zoom",
+    "zoomOut": "Diminuir zoom",
+    "resetZoom": "Resetar zoom",
+    "download": "Baixar",
+    "downloadFile": "Baixar {{name}}",
+    "print": "Imprimir",
+    "printDocument": "Imprimir documento",
+    "openInNewTab": "Abrir em nova aba",
+    "search": "Buscar no documento",
+    "pageCount": "{{count}} páginas",
+    "pageCountSingular": "1 página",
+    "viewer": "Visualizador de PDF",
+    "document": "Documento PDF"
   },
   "fileViewer": {
     "download": "Baixar",
@@ -190,6 +204,14 @@
     "unsupportedFileType": "Tipo de arquivo não suportado.",
     "fileTooLarge": "Arquivo muito grande (máx. {maxSize}MB).",
     "fileSelectionError": "Erro ao tentar abrir a seleção de arquivos.",
+    "uploadComplete": "Upload concluído!",
+    "fileReady": "Seu arquivo está pronto no link abaixo:",
+    "generatedFileLink": "Link do arquivo gerado",
+    "linkCopied": "Link Copiado",
+    "copyLink": "Copiar Link",
+    "openInNewTab": "Abrir link em nova aba",
+    "accessLink": "Acessar link",
+    "uploadNew": "Fazer novo upload",
     "customLink": "Link personalizado (opcional)",
     "urlPrefix": "easylink.live/",
     "linkPlaceholder": "meu-link-legal",

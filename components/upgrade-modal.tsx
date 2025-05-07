@@ -16,6 +16,7 @@ import { Check, ChevronDown, X as CloseIcon, Loader2, AlertTriangle } from "luci
 import { cn } from "@/lib/utils";
 import { loadStripe } from '@stripe/stripe-js';
 import { createClient } from '@/utils/supabase/client';
+import { useLanguage } from "@/lib/language-context";
 
 interface UpgradeModalProps {
   open: boolean;
@@ -65,6 +66,7 @@ const getPlansData = (currency: "BRL" | "USD") => [
 ];
 
 export function UpgradeModal({ open, onOpenChange, currentPlan = "Gratuito" }: UpgradeModalProps) {
+  const { t } = useLanguage();
   const [currency, setCurrency] = useState<"BRL" | "USD">("BRL");
   const [isLoading, setIsLoading] = useState<string | null>(null); // Guarda o ID do plano sendo carregado
   const [error, setError] = useState<string | null>(null);
@@ -86,7 +88,7 @@ export function UpgradeModal({ open, onOpenChange, currentPlan = "Gratuito" }: U
         
         if (!session?.user) {
           console.error('Usuário não autenticado');
-          setError('Você precisa estar logado para fazer upgrade.');
+          setError(t('modals.upgrade.needLogin'));
           setUserLoading(false);
           return;
         }
@@ -198,14 +200,14 @@ export function UpgradeModal({ open, onOpenChange, currentPlan = "Gratuito" }: U
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-4xl p-0 overflow-y-auto max-h-[90vh]">
         <DialogHeader className="p-6 pb-4 sticky top-0 bg-background z-10 border-b">
-          <DialogTitle className="text-center text-xl md:text-2xl">Escolha seu plano</DialogTitle>
+          <DialogTitle className="text-center text-xl md:text-2xl">{t('modals.upgrade.title')}</DialogTitle>
           <DialogDescription className="text-center pt-2">
             {userLoading ? (
-              "Carregando suas informações..."
+              t('modals.upgrade.loading')
             ) : userData ? (
               <>Seu plano atual: <span className="font-medium">{userData.profile?.current_plan || "Gratuito"}</span></>
             ) : (
-              "Selecione o plano que melhor atende às suas necessidades"
+              t('modals.upgrade.selectPlan')
             )}
           </DialogDescription>
           <DialogClose asChild>
@@ -263,13 +265,13 @@ export function UpgradeModal({ open, onOpenChange, currentPlan = "Gratuito" }: U
               )}
             >
               {plan.popular && ( 
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-[#9333EA] to-[#7C3AED] text-white px-3 py-0.5 rounded-full text-xs font-semibold shadow-md">Mais Popular</div> 
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-[#9333EA] to-[#7C3AED] text-white px-3 py-0.5 rounded-full text-xs font-semibold shadow-md">{t('modals.upgrade.mostPopular')}</div> 
               )}
               
               {userData?.profile?.current_plan && plan.name.toLowerCase() === userData.profile.current_plan.toLowerCase() && (
                 <div className="absolute -top-3 right-3 bg-green-500 text-white px-3 py-0.5 rounded-full text-xs font-semibold shadow-md flex items-center gap-1">
                   <Check className="h-3 w-3" />
-                  <span>Plano Atual</span>
+                  <span>{t('modals.upgrade.currentPlan')}</span>
                 </div>
               )}
               <h3 className={cn("text-xl font-semibold mb-2 text-center", plan.popular ? 'mt-4' : '')}>{plan.name}</h3>
@@ -296,13 +298,13 @@ export function UpgradeModal({ open, onOpenChange, currentPlan = "Gratuito" }: U
                 {isLoading === plan.name ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    <span>Processando...</span>
+                    <span>{t('modals.upgrade.processing')}</span>
                   </>
                 ) : userData?.profile?.current_plan && 
                    plan.name.toLowerCase() === userData.profile.current_plan.toLowerCase() ? (
                   <>
                     <Check className="w-4 h-4 mr-2" />
-                    <span>Plano Atual</span>
+                    <span>{t('modals.upgrade.currentPlan')}</span>
                   </>
                 ) : (
                   plan.ctaText
@@ -312,7 +314,7 @@ export function UpgradeModal({ open, onOpenChange, currentPlan = "Gratuito" }: U
           ))}
         </div>
          <DialogFooter className="p-6 pt-2 border-t">
-             <p className="text-xs text-muted-foreground text-center w-full">Garantia de devolução do dinheiro em 7 dias.</p>
+             <p className="text-xs text-muted-foreground text-center w-full">{t('modals.upgrade.moneyBackGuarantee')}</p>
          </DialogFooter>
       </DialogContent>
     </Dialog>

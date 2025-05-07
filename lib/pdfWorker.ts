@@ -1,10 +1,7 @@
 // Este arquivo centraliza a configuração do worker do PDF.js
 import { pdfjs } from 'react-pdf';
 
-// CDN definitivo para o worker do PDF.js - usamos v4.8.69 para compatibilidade
-const WORKER_CDN_URL = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.8.69/build/pdf.worker.min.js';
-
-// Função que configura o worker com abordagem robusta
+// Função que configura o worker com abordagem robusta seguindo as melhores práticas
 export function setupPdfWorker() {
   // Evitar execução no lado do servidor
   if (typeof window === 'undefined') {
@@ -16,9 +13,21 @@ export function setupPdfWorker() {
     return;
   }
 
-  // Usar CDN mais confiável (jsdelivr) para evitar problemas de CORS
-  pdfjs.GlobalWorkerOptions.workerSrc = WORKER_CDN_URL;
+  try {
+    // Usar a abordagem recomendada com import.meta.url para maior compatibilidade
+    pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+      'pdfjs-dist/build/pdf.worker.min.mjs',
+      import.meta.url,
+    ).toString();
+  } catch (error) {
+    // Fallback para CDN em caso de erro com import.meta.url
+    const WORKER_CDN_URL = `https://cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+    pdfjs.GlobalWorkerOptions.workerSrc = WORKER_CDN_URL;
+    console.warn('Usando CDN fallback para PDF.js worker devido a:', error);
+  }
 
-  // Console log para debug
-  console.log('PDF.js worker configurado com sucesso');
+  // Log apenas em ambiente de desenvolvimento
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`PDF.js worker v${pdfjs.version} configurado com sucesso`);
+  }
 }

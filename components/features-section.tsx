@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Mail, Edit3, Lock, QrCode, ArrowRight, Image as ImageIcon, ToggleLeft } from "lucide-react"
+import { useLanguage } from "@/lib/language-context"
 
 const featuresData = [
   {
@@ -78,6 +79,7 @@ const featuresData = [
 ];
 
 export function FeaturesSection() {
+  const { t } = useLanguage();
   const [activeFeatureIndex, setActiveFeatureIndex] = useState(0);
 
   useEffect(() => {
@@ -96,9 +98,9 @@ export function FeaturesSection() {
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="text-center mb-12 animate-fadeIn">
           <h2 className="text-2xl md:text-4xl font-bold mb-4 tracking-tight">
-            <span className="text-[#333333]">O poder da web,</span>
+            <span className="text-[#333333]">{t('features.title.part1')}</span>
             <br />
-            <span className="text-gradient">feito para você</span>
+            <span className="text-gradient">{t('features.title.part2')}</span>
           </h2>
         </div>
 
@@ -111,16 +113,16 @@ export function FeaturesSection() {
                 </div>
                 <div className="flex-1">
                   <h3 className="text-lg font-bold text-[#333333] mb-2 group-hover:text-[#0070F3] transition-colors">
-                    Capture emails
+                    {t('features.cards.email.title')}
                   </h3>
                   <p className="text-[#777777] mb-3 leading-relaxed text-sm">
-                    Capture endereços de email dos visitantes para geração de leads
+                    {t('features.cards.email.description')}
                   </p>
                   <Button
                     variant="link"
                     className="p-0 h-auto text-[#0070F3] font-medium flex items-center gap-1 group-hover:gap-2 transition-all text-sm"
                   >
-                    Saiba mais <ArrowRight className="w-4 h-4" />
+                    {t('features.learnMore')} <ArrowRight className="w-4 h-4" />
                   </Button>
                 </div>
               </div>
@@ -133,16 +135,16 @@ export function FeaturesSection() {
                 </div>
                 <div className="flex-1">
                   <h3 className="text-lg font-bold text-[#333333] mb-2 group-hover:text-[#00C2AE] transition-colors">
-                    Faça edições
+                    {t('features.cards.edit.title')}
                   </h3>
                   <p className="text-[#777777] mb-3 leading-relaxed text-sm">
-                    Edite seu conteúdo a qualquer momento, sem precisar fazer novo upload
+                    {t('features.cards.edit.description')}
                   </p>
                   <Button
                     variant="link"
                     className="p-0 h-auto text-[#00C2AE] font-medium flex items-center gap-1 group-hover:gap-2 transition-all text-sm"
                   >
-                    Saiba mais <ArrowRight className="w-4 h-4" />
+                    {t('features.learnMore')} <ArrowRight className="w-4 h-4" />
                   </Button>
                 </div>
               </div>
@@ -155,16 +157,16 @@ export function FeaturesSection() {
                 </div>
                 <div className="flex-1">
                   <h3 className="text-lg font-bold text-[#333333] mb-2 group-hover:text-[#0070F3] transition-colors">
-                    Proteção com senha
+                    {t('features.cards.password.title')}
                   </h3>
                   <p className="text-[#777777] mb-3 leading-relaxed text-sm">
-                    Proteja seu conteúdo com senha para controlar quem pode acessá-lo
+                    {t('features.cards.password.description')}
                   </p>
                   <Button
                     variant="link"
                     className="p-0 h-auto text-[#0070F3] font-medium flex items-center gap-1 group-hover:gap-2 transition-all text-sm"
                   >
-                    Saiba mais <ArrowRight className="w-4 h-4" />
+                    {t('features.learnMore')} <ArrowRight className="w-4 h-4" />
                   </Button>
                 </div>
               </div>
@@ -177,16 +179,16 @@ export function FeaturesSection() {
                 </div>
                 <div className="flex-1">
                   <h3 className="text-lg font-bold text-[#333333] mb-2 group-hover:text-[#00C2AE] transition-colors">
-                    Gere códigos QR
+                    {t('features.cards.qr.title')}
                   </h3>
                   <p className="text-[#777777] mb-3 leading-relaxed text-sm">
-                    Crie códigos QR para compartilhar seu conteúdo facilmente no mundo físico
+                    {t('features.cards.qr.description')}
                   </p>
                   <Button
                     variant="link"
                     className="p-0 h-auto text-[#00C2AE] font-medium flex items-center gap-1 group-hover:gap-2 transition-all text-sm"
                   >
-                    Saiba mais <ArrowRight className="w-4 h-4" />
+                    {t('features.learnMore')} <ArrowRight className="w-4 h-4" />
                   </Button>
                 </div>
               </div>

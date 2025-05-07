@@ -50,32 +50,83 @@ export async function POST(request: NextRequest) {
     // --- CORREÇÃO: Garantir que o utilizador existe na tabela public.users ---
     try {
         console.log(`[API Upload] Verificando/Criando registo para user ${authenticatedUserId} na tabela public.users`);
+        
+        // Primeiro, verificar se o usuário já existe pelo ID
         const { data: publicUser, error: findUserError } = await supabaseAdmin
             .from(supabaseConfig.tables.users)
-            .select('id')
+            .select('id, email')
             .eq('id', authenticatedUserId)
-            .maybeSingle(); // Usa maybeSingle para não dar erro se não encontrar
+            .maybeSingle();
 
         if (findUserError && findUserError.code !== 'PGRST116') { // Ignora erro 'not found' (PGRST116)
             throw findUserError; // Lança outros erros
         }
 
         if (!publicUser) {
-            console.log(`[API Upload] Utilizador ${authenticatedUserId} não encontrado em public.users, criando...`);
-            const { error: insertUserError } = await supabaseAdmin
+            // Verificar se já existe um usuário com o mesmo email
+            const { data: existingUserWithEmail, error: emailCheckError } = await supabaseAdmin
                 .from(supabaseConfig.tables.users)
-                .insert({
-                    id: authenticatedUserId,
-                    email: userEmail, // Usa o email da sessão
-                    // Adicione outros campos padrão se necessário (ex: is_anonymous = false)
-                });
-            if (insertUserError) {
-                 console.error(`[API Upload] Erro ao inserir utilizador ${authenticatedUserId} em public.users:`, insertUserError);
-                 throw insertUserError; // Lança erro se a inserção falhar
+                .select('id')
+                .eq('email', userEmail)
+                .maybeSingle();
+                
+            if (emailCheckError && emailCheckError.code !== 'PGRST116') {
+                throw emailCheckError;
             }
-            console.log(`[API Upload] Utilizador ${authenticatedUserId} criado em public.users.`);
+            
+            if (existingUserWithEmail) {
+                // Se já existe um usuário com o mesmo email, atualizamos os registros para usar o ID autenticado
+                console.log(`[API Upload] Encontrado usuário existente com o mesmo email. Atualizando para usar o ID autenticado.`);
+                
+                // Atualizar o registro existente para usar o novo ID
+                const { error: updateError } = await supabaseAdmin
+                    .from(supabaseConfig.tables.users)
+                    .update({ id: authenticatedUserId })
+                    .eq('id', existingUserWithEmail.id);
+                    
+                if (updateError) {
+                    console.error(`[API Upload] Erro ao atualizar ID do usuário:`, updateError);
+                    throw updateError;
+                }
+                
+                console.log(`[API Upload] ID do usuário atualizado com sucesso.`);
+            } else {
+                // Se não existe usuário com este email, criar um novo
+                console.log(`[API Upload] Utilizador ${authenticatedUserId} não encontrado em public.users, criando...`);
+                const { error: insertUserError } = await supabaseAdmin
+                    .from(supabaseConfig.tables.users)
+                    .insert({
+                        id: authenticatedUserId,
+                        email: userEmail,
+                        // Adicione outros campos padrão se necessário
+                    });
+                    
+                if (insertUserError) {
+                    console.error(`[API Upload] Erro ao inserir utilizador ${authenticatedUserId} em public.users:`, insertUserError);
+                    throw insertUserError;
+                }
+                
+                console.log(`[API Upload] Utilizador ${authenticatedUserId} criado em public.users.`);
+            }
         } else {
-             console.log(`[API Upload] Utilizador ${authenticatedUserId} já existe em public.users.`);
+            // Verificar se o email do usuário mudou e precisa ser atualizado
+            if (publicUser.email !== userEmail) {
+                console.log(`[API Upload] Email do usuário mudou. Atualizando...`);
+                
+                const { error: updateEmailError } = await supabaseAdmin
+                    .from(supabaseConfig.tables.users)
+                    .update({ email: userEmail })
+                    .eq('id', authenticatedUserId);
+                    
+                if (updateEmailError) {
+                    console.error(`[API Upload] Erro ao atualizar email do usuário:`, updateEmailError);
+                    throw updateEmailError;
+                }
+                
+                console.log(`[API Upload] Email do usuário atualizado com sucesso.`);
+            } else {
+                console.log(`[API Upload] Utilizador ${authenticatedUserId} já existe em public.users.`);
+            }
         }
     } catch (userSyncError: any) {
          console.error("[API Upload] Erro ao sincronizar utilizador com tabela pública:", userSyncError);

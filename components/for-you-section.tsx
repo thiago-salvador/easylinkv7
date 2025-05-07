@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
+import { useLanguage } from "@/lib/language-context"
 import {
   Briefcase,
   Paintbrush,
@@ -16,96 +17,97 @@ import {
 } from "lucide-react"
 
 export function ForYouSection() {
+  const { t } = useLanguage();
   const [activeCategory, setActiveCategory] = useState("sales")
 
   const categories = [
     {
       id: "sales",
-      name: "Vendas & Marketing",
+      name: t('forYou.categories.sales.name'),
       icon: (isActive: boolean) => <Briefcase className={`w-5 h-5 ${isActive ? "text-[#0070F3]" : "text-[#777777]"}`} />,
-      title: "Teste e compartilhe facilmente materiais de marketing para seu público",
-      description: "Consigo fazer upload e compartilhar conteúdo sem precisar de uma equipe técnica.",
-      author: "Paulo, Grupo Hapday",
+      title: t('forYou.categories.sales.title'),
+      description: t('forYou.categories.sales.description'),
+      author: t('forYou.categories.sales.author'),
       imageBg: "bg-gradient-to-b from-[#0070F3]/80 to-[#00C2AE]/80",
       images: ["/diverse-marketing-materials.png", "/modern-business-overview.png", "/modern-minimalist-catalog.png"],
     },
     {
       id: "designers",
-      name: "Designers & Artistas",
+      name: t('forYou.categories.designers.name'),
       icon: (isActive: boolean) => <Paintbrush className={`w-5 h-5 ${isActive ? "text-[#0070F3]" : "text-[#777777]"}`} />,
-      title: "Compartilhe seu portfólio e trabalhos criativos com clientes potenciais",
-      description: "O EasyLink me permite mostrar meus designs de forma profissional sem conhecimento técnico.",
-      author: "Ana, Designer Freelancer",
+      title: t('forYou.categories.designers.title'),
+      description: t('forYou.categories.designers.description'),
+      author: t('forYou.categories.designers.author'),
       imageBg: "bg-gradient-to-b from-[#9333EA]/80 to-[#7C3AED]/80",
       images: ["/abstract-cloud-network.png", "/abstract-square-logo.png", "/abstract-network.png"],
     },
     {
       id: "developers",
-      name: "Desenvolvedores",
+      name: t('forYou.categories.developers.name'),
       icon: (isActive: boolean) => <Code className={`w-5 h-5 ${isActive ? "text-[#0070F3]" : "text-[#777777]"}`} />,
-      title: "Demonstre protótipos e projetos web para clientes e colaboradores",
-      description: "Consigo compartilhar meus projetos em desenvolvimento de forma rápida e segura.",
-      author: "Carlos, Desenvolvedor Full-Stack",
+      title: t('forYou.categories.developers.title'),
+      description: t('forYou.categories.developers.description'),
+      author: t('forYou.categories.developers.author'),
       imageBg: "bg-gradient-to-b from-[#F59E0B]/80 to-[#FBBF24]/80",
       images: ["/veed-io-logo.png", "/abstract-network.png", "/abstract-cloud-network.png"],
     },
     {
       id: "realestate",
-      name: "Imobiliárias",
+      name: t('forYou.categories.realestate.name'),
       icon: (isActive: boolean) => <Home className={`w-5 h-5 ${isActive ? "text-[#0070F3]" : "text-[#777777]"}`} />,
-      title: "Crie apresentações de imóveis e compartilhe com potenciais compradores",
-      description: "Nossos corretores conseguem criar páginas para cada imóvel em minutos.",
-      author: "Márcia, Imobiliária Premium",
+      title: t('forYou.categories.realestate.title'),
+      description: t('forYou.categories.realestate.description'),
+      author: t('forYou.categories.realestate.author'),
       imageBg: "bg-gradient-to-b from-[#10B981]/80 to-[#34D399]/80",
       images: ["/modern-business-overview.png", "/birds-in-nest.png", "/purple-left-arrow.png"],
     },
     {
       id: "recruitment",
-      name: "Recrutamento",
+      name: t('forYou.categories.recruitment.name'),
       icon: (isActive: boolean) => <Users className={`w-5 h-5 ${isActive ? "text-[#0070F3]" : "text-[#777777]"}`} />,
-      title: "Compartilhe vagas e materiais de recrutamento com candidatos",
-      description: "Simplificou nosso processo de compartilhamento de informações com candidatos.",
-      author: "Roberto, RH Corporativo",
+      title: t('forYou.categories.recruitment.title'),
+      description: t('forYou.categories.recruitment.description'),
+      author: t('forYou.categories.recruitment.author'),
       imageBg: "bg-gradient-to-b from-[#EC4899]/80 to-[#F472B6]/80",
       images: ["/modern-minimalist-catalog.png", "/diverse-marketing-materials.png", "/abstract-square-logo.png"],
     },
     {
       id: "hospitality",
-      name: "Hotelaria & Gastronomia",
+      name: t('forYou.categories.hospitality.name'),
       icon: (isActive: boolean) => <Utensils className={`w-5 h-5 ${isActive ? "text-[#0070F3]" : "text-[#777777]"}`} />,
-      title: "Crie cardápios digitais e materiais promocionais para seu restaurante",
-      description: "Nossos clientes adoram escanear o QR code e ver nosso cardápio digital.",
-      author: "Juliana, Restaurante Sabor & Arte",
+      title: t('forYou.categories.hospitality.title'),
+      description: t('forYou.categories.hospitality.description'),
+      author: t('forYou.categories.hospitality.author'),
       imageBg: "bg-gradient-to-b from-[#EF4444]/80 to-[#F87171]/80",
       images: ["/birds-in-nest.png", "/modern-business-overview.png", "/diverse-marketing-materials.png"],
     },
     {
       id: "elearning",
-      name: "E-Learning & Publicações",
+      name: t('forYou.categories.elearning.name'),
       icon: (isActive: boolean) => <BookOpen className={`w-5 h-5 ${isActive ? "text-[#0070F3]" : "text-[#777777]"}`} />,
-      title: "Distribua materiais educacionais e publicações para seus alunos",
-      description: "Compartilhar materiais de curso nunca foi tão fácil e profissional.",
-      author: "Fernando, Professor Universitário",
+      title: t('forYou.categories.elearning.title'),
+      description: t('forYou.categories.elearning.description'),
+      author: t('forYou.categories.elearning.author'),
       imageBg: "bg-gradient-to-b from-[#3B82F6]/80 to-[#60A5FA]/80",
       images: ["/abstract-network.png", "/modern-minimalist-catalog.png", "/purple-left-arrow.png"],
     },
     {
-      id: "crypto",
-      name: "Crypto & Finanças",
+      id: "finance",
+      name: t('forYou.categories.finance.name'),
       icon: (isActive: boolean) => <Coins className={`w-5 h-5 ${isActive ? "text-[#0070F3]" : "text-[#777777]"}`} />,
-      title: "Compartilhe whitepapers e apresentações de projetos financeiros",
-      description: "A plataforma perfeita para distribuir documentação técnica com segurança.",
-      author: "Marcelo, Consultor Blockchain",
+      title: t('forYou.categories.finance.title'),
+      description: t('forYou.categories.finance.description'),
+      author: t('forYou.categories.finance.author'),
       imageBg: "bg-gradient-to-b from-[#6366F1]/80 to-[#818CF8]/80",
       images: ["/abstract-square-logo.png", "/abstract-cloud-network.png", "/veed-io-logo.png"],
     },
     {
-      id: "students",
-      name: "Estudantes",
+      id: "education",
+      name: t('forYou.categories.education.name'),
       icon: (isActive: boolean) => <GraduationCap className={`w-5 h-5 ${isActive ? "text-[#0070F3]" : "text-[#777777]"}`} />,
-      title: "Compartilhe trabalhos acadêmicos e projetos com professores e colegas",
-      description: "Uso o EasyLink para todos os meus trabalhos de faculdade. Super prático!",
-      author: "Luísa, Estudante de Design",
+      title: t('forYou.categories.education.title'),
+      description: t('forYou.categories.education.description'),
+      author: t('forYou.categories.education.author'),
       imageBg: "bg-gradient-to-b from-[#8B5CF6]/80 to-[#A78BFA]/80",
       images: ["/purple-left-arrow.png", "/abstract-network.png", "/birds-in-nest.png"],
     },
@@ -119,8 +121,8 @@ export function ForYouSection() {
         <div className="grid md:grid-cols-[1fr_1.5fr] gap-8 items-center">
           <div className="animate-fadeInLeft">
             <h2 className="text-2xl md:text-4xl font-bold text-gradient mb-8 tracking-tight">
-              Sim, o EasyLink
-              <br />é para você
+              {t('forYou.title.part1')}
+              <br />{t('forYou.title.part2')}
             </h2>
 
             <div className="space-y-1 pr-2">
@@ -167,7 +169,7 @@ export function ForYouSection() {
                 </h3>
 
                 <Button className="mt-4 bg-black hover:bg-black/90 text-white rounded-full text-sm px-5 py-2 h-auto shadow-sm hover:shadow-md transition-all duration-300">
-                  Ver exemplos aqui
+                  {t('forYou.viewExamples')}
                   <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>
 

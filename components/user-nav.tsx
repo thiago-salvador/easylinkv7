@@ -21,12 +21,14 @@ import { UpgradeModal } from '@/components/upgrade-modal';
 import { TeamManagementModal } from '@/components/team-management-modal';
 import { DeleteAccountModal } from '@/components/delete-account-modal';
 import { createClient } from '@/utils/supabase/client';
+import { useLanguage } from "@/lib/language-context";
 
 interface UserNavProps {
   user: SupabaseUser | null;
 }
 
 export function UserNav({ user }: UserNavProps) {
+  const { t } = useLanguage();
   const router = useRouter();
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
@@ -142,7 +144,7 @@ export function UserNav({ user }: UserNavProps) {
   };
 
   const emailInitial = user?.email ? user.email[0].toUpperCase() : '?';
-  const displayName = user?.email?.split('@')[0] || 'Utilizador';
+  const displayName = user?.email?.split('@')[0] || t('userNav.defaultUser');
   // currentPlan já está definido como state no início do componente
 
   return (
@@ -161,7 +163,7 @@ export function UserNav({ user }: UserNavProps) {
             <div className="flex flex-col space-y-1">
               <p className="text-sm font-medium leading-none">{displayName}</p>
               <p className="text-xs leading-none text-muted-foreground truncate">
-                {user?.email || 'Email não disponível'}
+                {user?.email || t('userNav.emailNotAvailable')}
               </p>
             </div>
           </DropdownMenuLabel>
@@ -169,15 +171,15 @@ export function UserNav({ user }: UserNavProps) {
           <DropdownMenuGroup>
             <DropdownMenuItem onSelect={() => setIsAccountModalOpen(true)}>
               <User className="mr-2 h-4 w-4" />
-              <span>Gerenciar Conta</span>
+              <span>{t('userNav.manageAccount')}</span>
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={openUpgradeModal}>
                <Zap className="mr-2 h-4 w-4" />
-              <span>Upgrade</span>
+              <span>{t('userNav.upgrade')}</span>
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={handleOpenTeamModal}>
               <Users className="mr-2 h-4 w-4" />
-              <span>Gerenciar Time</span>
+              <span>{t('userNav.manageTeam')}</span>
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
@@ -186,11 +188,11 @@ export function UserNav({ user }: UserNavProps) {
              className="text-red-600 focus:text-red-700 focus:bg-red-50"
            >
               <Trash2 className="mr-2 h-4 w-4" />
-              <span>Deletar Conta</span>
+              <span>{t('userNav.deleteAccount')}</span>
             </DropdownMenuItem>
           <DropdownMenuItem onClick={handleLogout}>
             <LogOut className="mr-2 h-4 w-4" />
-            <span>Deslogar</span>
+            <span>{t('userNav.logout')}</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

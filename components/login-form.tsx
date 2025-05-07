@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Loader2, AlertTriangle } from "lucide-react";
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
+import { useLanguage } from "@/lib/language-context";
 
 // Ícone do Google
 const GoogleIcon = () => (
@@ -20,6 +21,7 @@ const GoogleIcon = () => (
 );
 
 export function LoginForm() {
+  const { t } = useLanguage();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -66,7 +68,7 @@ export function LoginForm() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Falha no login');
+        throw new Error(errorData.error || t('auth.loginFailed'));
       }
       // Login com senha bem-sucedido, a API define o cookie.
       router.refresh();
@@ -116,7 +118,7 @@ export function LoginForm() {
 
     if (oauthError) {
       console.error("Erro no login com Google:", oauthError);
-      setError(`Erro ao tentar login com Google: ${oauthError.message}`);
+      setError(t('auth.googleLoginError', { message: oauthError.message }));
       setIsGoogleLoading(false);
     }
     // Se não houver erro, o utilizador será redirecionado para o Google...
@@ -138,23 +140,23 @@ export function LoginForm() {
          ) : (
            <GoogleIcon />
          )}
-         Continuar com Google
+         {t('auth.continueWithGoogle')}
        </Button>
 
        {/* Divisor "OU" */}
        <div className="relative">
          <div className="absolute inset-0 flex items-center"><span className="w-full border-t" /></div>
-         <div className="relative flex justify-center text-xs uppercase"><span className="bg-background px-2 text-muted-foreground">Ou entre com</span></div>
+         <div className="relative flex justify-center text-xs uppercase"><span className="bg-background px-2 text-muted-foreground">{t('auth.orLoginWith')}</span></div>
        </div>
 
        {/* Formulário Email/Senha */}
        <form onSubmit={handleLogin} className="space-y-4">
          {error && ( <div className="flex items-center gap-2 text-red-600 bg-red-50 border border-red-200 p-3 rounded-md text-sm"><AlertTriangle className="h-4 w-4" /><span>{error}</span></div>)}
-         <div className="space-y-1"><Label htmlFor="login-email">Email</Label><Input id="login-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required disabled={isLoading || isGoogleLoading} placeholder="seu@email.com"/></div>
-         <div className="space-y-1"><Label htmlFor="login-password">Senha</Label><Input id="login-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required disabled={isLoading || isGoogleLoading} placeholder="********"/></div>
+         <div className="space-y-1"><Label htmlFor="login-email">{t('auth.email')}</Label><Input id="login-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required disabled={isLoading || isGoogleLoading} placeholder={t('auth.emailPlaceholder')}/></div>
+         <div className="space-y-1"><Label htmlFor="login-password">{t('auth.password')}</Label><Input id="login-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required disabled={isLoading || isGoogleLoading} placeholder="********"/></div>
          <Button type="submit" disabled={isLoading || isGoogleLoading} className="w-full">
            {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-           Entrar
+           {t('auth.login')}
          </Button>
        </form>
      </div>

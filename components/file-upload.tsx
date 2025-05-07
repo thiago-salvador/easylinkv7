@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 import { v4 as uuidv4 } from "uuid"
+import { useLanguage } from "@/lib/language-context"
 // import { mockUpload } from "@/lib/mock-upload"; // Mantenha se precisar de fallback local
 
 interface FileUploadProps {
@@ -15,6 +16,8 @@ interface FileUploadProps {
 }
 
 export function FileUpload({ onUploadComplete }: FileUploadProps) {
+  // Usar o hook de internacionalização
+  const { t } = useLanguage();
   const [isDragging, setIsDragging] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
@@ -79,8 +82,8 @@ export function FileUpload({ onUploadComplete }: FileUploadProps) {
     if (fileInputRef.current) {
         fileInputRef.current.click();
     } else {
-        console.error("FileUpload: Referência do input de arquivo não encontrada!");
-        setError("Erro ao tentar abrir a seleção de arquivos.")
+        console.error("FileUpload: File input reference not found!");
+        setError(t('fileUpload.fileSelectionError'))
     }
   }
 
@@ -103,14 +106,14 @@ export function FileUpload({ onUploadComplete }: FileUploadProps) {
 
 
     if (!isValidType) {
-      setError("Tipo de arquivo não suportado.")
+      setError(t('fileUpload.unsupportedFileType'))
       return
     }
 
     // Check file size (e.g., 10MB limit)
     const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
     if (file.size > MAX_FILE_SIZE) {
-      setError(`Arquivo muito grande (máx. ${MAX_FILE_SIZE / 1024 / 1024}MB).`)
+      setError(t('fileUpload.fileTooLarge', { maxSize: MAX_FILE_SIZE / 1024 / 1024 }))
       return
     }
 
@@ -139,17 +142,21 @@ export function FileUpload({ onUploadComplete }: FileUploadProps) {
       return;
     }
 
+    // Definir estados de forma agrupada para evitar renderizações parciais
     setIsUploading(true)
     setUploadProgress(0)
     setError(null)
     setUploadSuccess(false);
 
     let uploadTimer: NodeJS.Timeout | null = null;
+    let isMounted = true; // Flag para verificar se o componente ainda está montado
 
     try {
       // Simulate progress visually
       uploadTimer = setInterval(() => {
-        setUploadProgress(prev => Math.min(prev + 10, 90));
+        if (isMounted) {
+          setUploadProgress(prev => Math.min(prev + 10, 90));
+        }
       }, 300);
 
       const formData = new FormData()
@@ -170,7 +177,13 @@ export function FileUpload({ onUploadComplete }: FileUploadProps) {
         signal: AbortSignal.timeout(120000), // 120 seconds timeout for potential conversion
       })
 
-      if (uploadTimer) clearInterval(uploadTimer);
+      if (uploadTimer) {
+        clearInterval(uploadTimer);
+        uploadTimer = null;
+      }
+
+      // Verificar se o componente ainda está montado antes de atualizar o estado
+      if (!isMounted) return;
 
       if (!response.ok) {
         let errorMessage = `Erro no servidor (${response.status})`;
@@ -187,21 +200,47 @@ export function FileUpload({ onUploadComplete }: FileUploadProps) {
       }
 
       const responseData = await response.json();
+      
+      // Verificar novamente se o componente está montado antes de atualizar estados
+      if (!isMounted) return;
+      
+      // Agrupar atualizações de estado para minimizar renderizações
       setUploadProgress(100);
       setFileData(responseData);
-      setUploadSuccess(true);
-
-      if (onUploadComplete) {
-        onUploadComplete(responseData);
-      }
+      
+      // Pequeno atraso antes de definir o sucesso para garantir que a transição de estado seja suave
+      setTimeout(() => {
+        if (isMounted) {
+          setUploadSuccess(true);
+          setIsUploading(false);
+          
+          if (onUploadComplete) {
+            onUploadComplete(responseData);
+          }
+        }
+      }, 100);
     } catch (err: any) {
-      if (uploadTimer) clearInterval(uploadTimer);
+      if (uploadTimer) {
+        clearInterval(uploadTimer);
+        uploadTimer = null;
+      }
+      
+      // Verificar se o componente ainda está montado antes de atualizar o estado
+      if (!isMounted) return;
+      
       console.error("FileUpload: Erro no handleUpload:", err);
       setError(err.name === 'TimeoutError' ? 'Tempo limite de upload excedido.' : (err.message || "Falha no upload. Tente novamente."));
       setUploadProgress(0);
-    } finally {
       setIsUploading(false);
     }
+    
+    // Função de limpeza para quando o componente for desmontado durante o upload
+    return () => {
+      isMounted = false;
+      if (uploadTimer) {
+        clearInterval(uploadTimer);
+      }
+    };
   }
 
   // --- Success State Functions ---
@@ -228,59 +267,91 @@ export function FileUpload({ onUploadComplete }: FileUploadProps) {
   }
 
   const resetForm = () => {
-    setSelectedFile(null);
-    setCustomSlug("");
-    setUploadSuccess(false);
-    setFileData(null);
-    setError(null);
-    setUploadProgress(0);
-    setIsDragging(false);
-    setIsUploading(false);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
+    // Usar setTimeout para garantir que a manipulação do DOM ocorra no próximo ciclo de renderização
+    setTimeout(() => {
+      // Agrupar atualizações de estado para minimizar renderizações e evitar problemas de DOM
+      setSelectedFile(null);
+      setCustomSlug("");
+      setUploadSuccess(false);
+      setFileData(null);
+      setError(null);
+      setUploadProgress(0);
+      setIsDragging(false);
+      setIsUploading(false);
+      
+      // Garantir que o fileInputRef ainda existe antes de tentar acessá-lo
+      if (fileInputRef.current) {
+        try {
+          fileInputRef.current.value = "";
+        } catch (error) {
+          console.error("Erro ao resetar o input de arquivo:", error);
+        }
+      }
+    }, 0);
   }
 
   // --- Render ---
 
+  // Efeito para lidar com a limpeza quando o componente é desmontado
+  useEffect(() => {
+    return () => {
+      // Função de limpeza para garantir que não haja manipulação do DOM após desmontagem
+      // Não podemos atribuir null diretamente ao current pois é somente leitura
+      // Apenas garantimos que qualquer manipulação pendente seja cancelada
+      try {
+        // Limpeza adicional se necessário
+        console.log("Componente FileUpload desmontado");
+      } catch (error) {
+        console.error("Erro durante a limpeza do componente:", error);
+      }
+    };
+  }, []);
+
   // Success Screen
   if (uploadSuccess && fileData) {
-    const fileUrl = getFileUrl();
-    return (
-      <div className="bg-white p-6 rounded-xl text-center shadow-lg border border-gray-200">
-        <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
-          <Check className="h-8 w-8 text-green-600" aria-hidden="true" />
+    try {
+      const fileUrl = getFileUrl();
+      return (
+        <div className="bg-white p-6 rounded-xl text-center shadow-lg border border-gray-200">
+          <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+            <Check className="h-8 w-8 text-green-600" aria-hidden="true" />
+          </div>
+          <h3 className="text-xl font-bold text-gray-900 mb-2">{t('fileUpload.uploadComplete')}</h3>
+          <p className="text-gray-600 mb-6">{t('fileUpload.fileReady')}</p>
+          <div className="flex items-center mb-6 relative bg-gray-50 rounded-lg border border-gray-200 p-2">
+            <LinkIcon className="w-5 h-5 text-gray-400 mr-2 flex-shrink-0" aria-hidden="true" />
+            <input
+               type="text"
+               readOnly
+               value={fileUrl}
+               className="truncate flex-1 text-sm text-gray-800 bg-transparent border-none focus:ring-0 p-0"
+               aria-label={t('fileUpload.generatedFileLink')}
+            />
+            <Button variant="ghost" size="sm" className="ml-2 flex-shrink-0" onClick={handleCopyLink} aria-label={copySuccess ? t('fileUpload.linkCopied') : t('fileUpload.copyLink')}>
+              {copySuccess ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
+            </Button>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button
+              className="w-full sm:w-auto flex-1 bg-primary text-white hover:bg-primary/90"
+              onClick={() => window.open(fileUrl, "_blank")}
+              aria-label={t('fileUpload.openInNewTab')}
+            >
+              <ExternalLink className="mr-2 h-4 w-4" />
+              {t('fileUpload.accessLink')}
+            </Button>
+            <Button variant="outline" className="w-full sm:w-auto flex-1" onClick={resetForm} aria-label={t('fileUpload.uploadNew')}>
+              {t('fileUpload.uploadNew')}
+            </Button>
+          </div>
         </div>
-        <h3 className="text-xl font-bold text-gray-900 mb-2">Upload concluído!</h3>
-        <p className="text-gray-600 mb-6">Seu arquivo está pronto no link abaixo:</p>
-        <div className="flex items-center mb-6 relative bg-gray-50 rounded-lg border border-gray-200 p-2">
-          <LinkIcon className="w-5 h-5 text-gray-400 mr-2 flex-shrink-0" aria-hidden="true" />
-          <input
-             type="text"
-             readOnly
-             value={fileUrl}
-             className="truncate flex-1 text-sm text-gray-800 bg-transparent border-none focus:ring-0 p-0"
-             aria-label="Link do arquivo gerado"
-          />
-          <Button variant="ghost" size="sm" className="ml-2 flex-shrink-0" onClick={handleCopyLink} aria-label={copySuccess ? "Link Copiado" : "Copiar Link"}>
-            {copySuccess ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
-          </Button>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-3">
-          <Button
-            className="w-full sm:w-auto flex-1 bg-primary text-white hover:bg-primary/90"
-            onClick={() => window.open(fileUrl, "_blank")}
-            aria-label="Abrir link em nova aba"
-          >
-            <ExternalLink className="mr-2 h-4 w-4" />
-            Acessar link
-          </Button>
-          <Button variant="outline" className="w-full sm:w-auto flex-1" onClick={resetForm} aria-label="Fazer novo upload">
-            Fazer novo upload
-          </Button>
-        </div>
-      </div>
-    );
+      );
+    } catch (error) {
+      console.error("Erro ao renderizar tela de sucesso:", error);
+      // Em caso de erro na renderização da tela de sucesso, resetar para o estado inicial
+      setTimeout(() => resetForm(), 0);
+      return null; // Retornar null para evitar erros de renderização
+    }
   }
 
   // Main Upload Form
@@ -326,9 +397,9 @@ export function FileUpload({ onUploadComplete }: FileUploadProps) {
              </div>
              <div className="text-center">
                <p className="text-sm sm:text-base text-gray-600 mb-1 leading-relaxed">
-                 <span className="font-medium text-primary">Clique aqui</span> ou arraste e solte um arquivo
+                 <span className="font-medium text-primary">{t('home.clickHere')}</span> {t('home.dragAndDrop')}
                </p>
-               <p className="text-xs text-gray-500">PDF, PPT, Keynote, HTML ou ZIP (máx. 10MB)</p>
+               <p className="text-xs text-gray-500">{t('home.supportedFormats')}</p>
              </div>
           </div>
         )}
@@ -355,14 +426,14 @@ export function FileUpload({ onUploadComplete }: FileUploadProps) {
             <div className="space-y-4">
               <div>
                 <label htmlFor="custom-slug" className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  Link personalizado (opcional)
+                  {t('fileUpload.customLink')}
                 </label>
                 <div className="flex items-center">
-                  <span className="text-gray-500 text-sm mr-1 bg-gray-100 px-2 py-2 rounded-l-md border border-r-0 border-gray-300" aria-hidden="true">easylink.live/</span>
+                  <span className="text-gray-500 text-sm mr-1 bg-gray-100 px-2 py-2 rounded-l-md border border-r-0 border-gray-300" aria-hidden="true">{t('fileUpload.urlPrefix')}</span>
                   <Input
                     id="custom-slug"
                     aria-label="Insira o link personalizado desejado (opcional)"
-                    placeholder="meu-link-legal"
+                    placeholder={t('fileUpload.linkPlaceholder')}
                     value={customSlug}
                     onChange={(e) => setCustomSlug(e.target.value.replace(/[^a-zA-Z0-9-_]/g, ''))} // Basic sanitization
                     className="flex-1 rounded-l-none focus:ring-primary focus:border-primary"
@@ -374,7 +445,7 @@ export function FileUpload({ onUploadComplete }: FileUploadProps) {
                 className="w-full relative overflow-hidden bg-gradient-to-r from-primary to-secondary hover:shadow-md transition-all duration-300"
                 aria-label="Fazer upload do arquivo selecionado"
               >
-                Fazer upload
+                {t('fileUpload.uploadButton')}
               </Button>
             </div>
           </div>
@@ -384,7 +455,7 @@ export function FileUpload({ onUploadComplete }: FileUploadProps) {
          {isUploading && (
             <div className="flex flex-col items-center justify-center gap-4" aria-live="polite">
                  <Loader2 className="w-10 h-10 animate-spin text-primary" aria-hidden="true" />
-                 <p className="text-sm text-gray-600">Enviando... {uploadProgress}%</p>
+                 <p className="text-sm text-gray-600">{t('fileUpload.uploading')} {uploadProgress}%</p>
                  <div className="w-full bg-gray-200 rounded-full h-2.5" role="progressbar" aria-valuenow={uploadProgress} aria-valuemin={0} aria-valuemax={100}>
                      <div
                          className="bg-primary h-2.5 rounded-full transition-all duration-300 ease-out"

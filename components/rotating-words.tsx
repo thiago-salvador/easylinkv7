@@ -2,9 +2,19 @@
 
 import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
+import { useLanguage } from "@/lib/language-context"
 
 export function RotatingWords() {
-  const words = ["Documentos", "Imagens", "Código", "Mais"]
+  const { t } = useLanguage();
+  
+  // Obter palavras do sistema de tradução
+  const words = [
+    t('rotatingWords.documents'),
+    t('rotatingWords.images'),
+    t('rotatingWords.code'),
+    t('rotatingWords.more')
+  ]
+  
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isAnimating, setIsAnimating] = useState(false)
 

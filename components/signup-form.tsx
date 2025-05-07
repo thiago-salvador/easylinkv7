@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Loader2, AlertTriangle } from "lucide-react";
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
+import { useLanguage } from "@/lib/language-context";
 
 // Ícone do Google
 const GoogleIcon = () => (
@@ -21,6 +22,7 @@ const GoogleIcon = () => (
 
 
 export function SignupForm() {
+  const { t } = useLanguage();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -39,12 +41,12 @@ export function SignupForm() {
     setSuccessMessage(null);
 
     if (password !== confirmPassword) {
-      setError('As senhas não coincidem.');
+      setError(t('auth.passwordsDoNotMatch'));
       setIsLoading(false);
       return;
     }
     if (!name.trim()) {
-        setError('Por favor, insira o seu nome.');
+        setError(t('auth.pleaseEnterName'));
         setIsLoading(false);
         return;
     }
@@ -56,8 +58,8 @@ export function SignupForm() {
         body: JSON.stringify({ email, password, name }),
       });
       const responseData = await response.json();
-      if (!response.ok) throw new Error(responseData.error || 'Falha no registo');
-      setSuccessMessage(responseData.message || 'Verifique o seu email para confirmar o registo!');
+      if (!response.ok) throw new Error(responseData.error || t('auth.signupFailed'));
+      setSuccessMessage(responseData.message || t('auth.checkEmailForConfirmation'));
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -79,7 +81,7 @@ export function SignupForm() {
 
     if (oauthError) {
       console.error("Erro no login com Google:", oauthError);
-      setError(`Erro ao tentar login com Google: ${oauthError.message}`);
+      setError(t('auth.googleLoginError', { message: oauthError.message }));
       setIsGoogleLoading(false);
     }
     // Se não houver erro, o utilizador será redirecionado...
@@ -96,26 +98,26 @@ export function SignupForm() {
         type="button"
       >
         {isGoogleLoading ? ( <Loader2 className="h-4 w-4 animate-spin" /> ) : ( <GoogleIcon /> )}
-        Continuar com Google
+        {t('auth.continueWithGoogle')}
       </Button>
 
       {/* Divisor "OU" */}
       <div className="relative">
         <div className="absolute inset-0 flex items-center"><span className="w-full border-t" /></div>
-        <div className="relative flex justify-center text-xs uppercase"><span className="bg-background px-2 text-muted-foreground">Ou continue com</span></div>
+        <div className="relative flex justify-center text-xs uppercase"><span className="bg-background px-2 text-muted-foreground">{t('auth.orContinueWith')}</span></div>
       </div>
 
       {/* Formulário Email/Senha */}
       <form onSubmit={handleSignup} className="space-y-4">
         {error && ( <div className="flex items-center gap-2 text-red-600 bg-red-50 border border-red-200 p-3 rounded-md text-sm"><AlertTriangle className="h-4 w-4" /><span>{error}</span></div>)}
         {successMessage && <p className="text-green-600 text-sm bg-green-50 p-3 rounded-md border border-green-200">{successMessage}</p>}
-        <div className="space-y-1"><Label htmlFor="signup-name">Nome</Label><Input id="signup-name" type="text" value={name} onChange={(e) => setName(e.target.value)} required disabled={isLoading || isGoogleLoading} placeholder="Seu nome completo"/></div>
-        <div className="space-y-1"><Label htmlFor="signup-email">Email</Label><Input id="signup-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required disabled={isLoading || isGoogleLoading} placeholder="seu@email.com"/></div>
-        <div className="space-y-1"><Label htmlFor="signup-password">Senha</Label><Input id="signup-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} disabled={isLoading || isGoogleLoading} placeholder="Pelo menos 6 caracteres"/></div>
-        <div className="space-y-1"><Label htmlFor="signup-confirm-password">Confirmar Senha</Label><Input id="signup-confirm-password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required minLength={6} disabled={isLoading || isGoogleLoading} placeholder="Repita a senha"/></div>
+        <div className="space-y-1"><Label htmlFor="signup-name">{t('auth.name')}</Label><Input id="signup-name" type="text" value={name} onChange={(e) => setName(e.target.value)} required disabled={isLoading || isGoogleLoading} placeholder={t('auth.namePlaceholder')}/></div>
+        <div className="space-y-1"><Label htmlFor="signup-email">{t('auth.email')}</Label><Input id="signup-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required disabled={isLoading || isGoogleLoading} placeholder={t('auth.emailPlaceholder')}/></div>
+        <div className="space-y-1"><Label htmlFor="signup-password">{t('auth.password')}</Label><Input id="signup-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} disabled={isLoading || isGoogleLoading} placeholder={t('auth.passwordPlaceholder')}/></div>
+        <div className="space-y-1"><Label htmlFor="signup-confirm-password">{t('auth.confirmPassword')}</Label><Input id="signup-confirm-password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required minLength={6} disabled={isLoading || isGoogleLoading} placeholder={t('auth.confirmPasswordPlaceholder')}/></div>
         <Button type="submit" disabled={isLoading || isGoogleLoading} className="w-full">
           {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-          Criar Conta
+          {t('auth.createAccount')}
         </Button>
       </form>
     </div>
