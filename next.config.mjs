@@ -86,7 +86,7 @@ const nextConfig = {
       const supabaseStorageUrl = supabaseUrl.replace(supabaseDomain, `storage.${supabaseDomain}`); // Tentativa, pode não ser exato
       const supabaseStorageHostname = new URL(supabaseStorageUrl).hostname;
   
-      // Construir a CSP dinamicamente
+      // Construír a CSP dinamicamente
       // Fontes: 'self' (próprio domínio), URLs permitidas, 'unsafe-inline'/'unsafe-eval' (necessário por algumas libs/estilos inline, menos seguro)
       const cspValue = [
          `default-src 'self'`, // Padrão: só permite do próprio domínio
@@ -94,8 +94,8 @@ const nextConfig = {
          `style-src 'self' 'unsafe-inline' ${googleFontsUrl} ${googleFontsStaticUrl}`, // Estilos: próprio site, inline, Google Fonts
          `style-src-elem 'self' 'unsafe-inline' ${googleFontsUrl} ${googleFontsStaticUrl}`, // Elementos de estilo específicos
          `font-src 'self' ${googleFontsStaticUrl} data:`, // Fontes: próprio site, Google Fonts, data URIs
-         `img-src 'self' data: blob: <span class="math-inline">\{supabaseUrl\} https\://</span>{supabaseStorageHostname}`, // Imagens: próprio site, data URIs, blobs, Supabase URL e Storage
-         `connect-src 'self' <span class="math-inline">\{supabaseUrl\} wss\://</span>{supabaseDomain} ${vercelInsightsUrl} ${stripeApiUrl} ${cdnjsUrl} ${unpkgUrl} ${jsdelivrUrl}`, // Conexões (API, WebSockets): próprio site, Supabase (API e WS), Vercel, Stripe API, CDNs
+         `img-src 'self' data: blob: ${supabaseUrl} https://${supabaseStorageHostname}`, // Imagens: próprio site, data URIs, blobs, Supabase URL e Storage
+         `connect-src 'self' ${supabaseUrl} wss://${supabaseDomain} ${vercelInsightsUrl} ${stripeApiUrl} ${cdnjsUrl} ${unpkgUrl} ${jsdelivrUrl}`, // Conexões (API, WebSockets): próprio site, Supabase (API e WS), Vercel, Stripe API, CDNs
          `frame-src 'self' ${stripeJsUrl}`, // Iframes: próprio site, Stripe.js (para elementos do Stripe)
          `worker-src 'self' blob: ${cdnjsUrl} ${unpkgUrl} ${jsdelivrUrl}`, // Web Workers: próprio site, blobs, CDNs
          `upgrade-insecure-requests` // Tenta sempre usar HTTPS
