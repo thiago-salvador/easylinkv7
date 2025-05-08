@@ -42,42 +42,59 @@ export default async function RootLayout({
     const headersList = headers();
     
     // Obter o pathname da requisição atual
+    // Usamos várias opções para garantir compatibilidade com diferentes ambientes
     const pathname = headersList.get('x-next-pathname') || 
                     headersList.get('x-invoke-path') || 
                     headersList.get('x-matched-path') || 
                     "";
 
     // Verificar se estamos em uma rota de visualização
-    const isViewRoute = pathname.startsWith('/view/') || pathname.startsWith('/sample/');
+    const isViewRoute = pathname.startsWith('/view/');
     
     // Log apenas em ambiente de desenvolvimento
     if (process.env.NODE_ENV === 'development') {
       console.log(`[RootLayout] Pathname: '${pathname}', isViewRoute: ${isViewRoute}`);
     }
 
-    // Criar cliente do Supabase
+    // Inicializar o cliente Supabase no servidor
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
       {
         cookies: {
-          get(name: string) {
-            return cookieStore.get(name)?.value;
+          get(name: string) { 
+            return cookieStore.get(name)?.value; 
           },
           set(name: string, value: string, options: CookieOptions) {
-            cookieStore.set({ name, value, ...options });
+            try { 
+              cookieStore.set({ name, value, ...options }); 
+            } catch (error) {
+              // Ignorar erros em contextos onde cookies não podem ser setados
+              if (process.env.NODE_ENV === 'development') {
+                console.warn(`[RootLayout] Erro ao definir cookie ${name}:`, error);
+              }
+            }
           },
           remove(name: string, options: CookieOptions) {
-            cookieStore.set({ name, value: '', ...options });
+            try { 
+              cookieStore.delete({ name, ...options }); 
+            } catch (error) {
+              // Ignorar erros em contextos onde cookies não podem ser removidos
+              if (process.env.NODE_ENV === 'development') {
+                console.warn(`[RootLayout] Erro ao remover cookie ${name}:`, error);
+              }
+            }
           },
         },
       }
     );
-
-    // Obter o usuário atual
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
+    
+    // Obter informações do usuário autenticado
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    
+    if (authError && process.env.NODE_ENV === 'development') {
+      console.error('[RootLayout] Erro na autenticação:', authError.message);
+    }
 
     // Renderização condicional baseada no tipo de rota
     if (isViewRoute) {
@@ -86,9 +103,7 @@ export default async function RootLayout({
       return (
         <html lang="pt-BR" suppressHydrationWarning>
           <body className={inter.className}>
-            <LanguageProvider>
-              {children}
-            </LanguageProvider>
+            {children}
           </body>
         </html>
       );
@@ -96,14 +111,28 @@ export default async function RootLayout({
 
     // Layout padrão para todas as outras páginas
     return (
-      <html lang="pt-BR">
+      <html lang="pt-BR" suppressHydrationWarning>
+        <head>
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+          />
+          <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+        </head>
         <body className={inter.className}>
-          <LanguageProvider>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-              <ConditionalHeader session={session} isViewRoute={isViewRoute} />
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <LanguageProvider>
+              <ConditionalHeader user={user} />
               {children}
-            </ThemeProvider>
-          </LanguageProvider>
+            </LanguageProvider>
+          </ThemeProvider>
         </body>
       </html>
     );
