@@ -1,3 +1,4 @@
+// lib/language-context.tsx
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
@@ -22,66 +23,83 @@ const translations = {
   en: enTranslations
 };
 
-// Função para obter um valor aninhado de um objeto usando uma string de caminho
+// Função para obter um valor aninhado (sem alterações)
 function getNestedValue(obj: any, path: string): string {
   const keys = path.split('.');
   let result = obj;
-  
   for (const key of keys) {
     if (result && typeof result === 'object' && key in result) {
       result = result[key];
     } else {
-      return path; // Retorna a chave se não encontrar a tradução
+      return path; // Retorna a chave se não encontrar
     }
   }
-  
-  return result as string;
+  return String(result); // Garante que seja string
 }
 
 // Criar o contexto
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
+// --- AJUSTES PRINCIPAIS ABAIXO ---
+
+// Helper para verificar se estamos no navegador
+const isBrowser = typeof window !== 'undefined';
+
 // Provider do contexto
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  // Estado para armazenar o idioma atual
+  // Estado para armazenar o idioma atual, iniciando com 'pt'
+  // Este valor inicial ('pt') será usado no servidor durante o build
   const [language, setLanguageState] = useState<Language>('pt');
-  
-  // Efeito para carregar o idioma salvo no localStorage
+
+  // Efeito para LER do localStorage APENAS no navegador, APÓS a primeira renderização
   useEffect(() => {
-    const savedLanguage = localStorage.getItem('easylink_language');
-    if (savedLanguage === 'pt' || savedLanguage === 'en') {
-      setLanguageState(savedLanguage);
+    // Só executa se estiver no navegador
+    if (isBrowser) {
+      const savedLanguage = localStorage.getItem('easylink_language');
+      if (savedLanguage === 'pt' || savedLanguage === 'en') {
+        // Define o estado apenas se o idioma salvo for diferente do inicial
+        // para evitar re-renderizações desnecessárias se já for 'pt'
+        if (savedLanguage !== language) {
+           setLanguageState(savedLanguage);
+        }
+      }
     }
-  }, []);
-  
-  // Função para alterar o idioma e salvar no localStorage
+    // O array vazio [] significa que este efeito só roda uma vez, quando o componente "monta" no navegador
+  }, []); // Dependência vazia
+
+  // Função para alterar o idioma e salvar no localStorage (apenas no navegador)
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
-    localStorage.setItem('easylink_language', lang);
+    // Só tenta salvar se estiver no navegador
+    if (isBrowser) {
+      try {
+        localStorage.setItem('easylink_language', lang);
+      } catch (e) {
+        console.error("Falha ao salvar idioma no localStorage:", e);
+      }
+    }
   };
-  
-  // Função de tradução com suporte a interpolação de parâmetros
+
+  // Função de tradução (sem alterações na lógica principal)
   const t = (key: string, params?: Record<string, any>): string => {
-    const currentTranslations = translations[language];
+    const currentTranslations = translations[language]; // Usa o estado atual
     let translatedText = getNestedValue(currentTranslations, key) || key;
-    
-    // Interpolar parâmetros se fornecidos
+
     if (params) {
       Object.entries(params).forEach(([paramKey, paramValue]) => {
         translatedText = translatedText.replace(`{${paramKey}}`, String(paramValue));
       });
     }
-    
     return translatedText;
   };
-  
+
   // Valor do contexto
   const contextValue: LanguageContextType = {
     language,
     setLanguage,
     t
   };
-  
+
   return (
     <LanguageContext.Provider value={contextValue}>
       {children}
@@ -89,13 +107,13 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-// Hook para usar o contexto
+// Hook para usar o contexto (sem alterações)
 export function useLanguage() {
   const context = useContext(LanguageContext);
-  
   if (context === undefined) {
+    // Se este erro ainda ocorrer, significa que o problema é mais fundamental
+    // ou que useLanguage está sendo chamado fora de um componente filho do Provider.
     throw new Error('useLanguage must be used within a LanguageProvider');
   }
-  
   return context;
 }
