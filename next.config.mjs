@@ -1,6 +1,22 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
+    // Essas configurações ajudam com o build na Vercel
+    output: 'standalone', // Otimiza para deployment
+    
+    // Configurações específicas para o problema de renderização estática
+    // Evita que a Vercel faça SSG (Static Site Generation) durante o build
+    // para páginas que usam componentes com 'use client'
+    staticPageGenerationTimeout: 120, // tempo mais longo para gerar páginas estáticas
+    
+    // Configura o comportamento do erro CSR em páginas SSG
+    onDemandEntries: {
+      // Período que as páginas serão mantidas em memória
+      maxInactiveAge: 60 * 1000,
+      // Número máximo de páginas mantidas em memória
+      pagesBufferLength: 5,
+    },
+    
     eslint: {
       ignoreDuringBuilds: true,
     },

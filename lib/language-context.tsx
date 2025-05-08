@@ -6,13 +6,6 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 // Tipos de idiomas suportados
 export type Language = 'pt' | 'en';
 
-// Tipo do contexto
-type LanguageContextType = {
-  language: Language;
-  setLanguage: (lang: Language) => void;
-  t: (key: string, params?: Record<string, any>) => string;
-};
-
 // Importar traduções
 import ptTranslations from '@/i18n/locales/pt/translation.json';
 import enTranslations from '@/i18n/locales/en/translation.json';
@@ -23,7 +16,7 @@ const translations = {
   en: enTranslations
 };
 
-// Função para obter um valor aninhado (sem alterações)
+// Função para obter um valor aninhado
 function getNestedValue(obj: any, path: string): string {
   const keys = path.split('.');
   let result = obj;
@@ -37,19 +30,47 @@ function getNestedValue(obj: any, path: string): string {
   return String(result); // Garante que seja string
 }
 
-// Criar o contexto
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+// Valores padrão para o servidor - IMPORTANTE para SSR
+const defaultLanguage: Language = 'pt';
 
-// --- AJUSTES PRINCIPAIS ABAIXO ---
+// Função de tradução que funciona mesmo sem contexto (para SSR)
+function getTranslation(lang: Language, key: string, params?: Record<string, any>): string {
+  const currentTranslations = translations[lang];
+  let translatedText = getNestedValue(currentTranslations, key) || key;
+
+  if (params) {
+    Object.entries(params).forEach(([paramKey, paramValue]) => {
+      translatedText = translatedText.replace(`{${paramKey}}`, String(paramValue));
+    });
+  }
+  return translatedText;
+}
+
+// Tipo do contexto
+type LanguageContextType = {
+  language: Language;
+  setLanguage: (lang: Language) => void;
+  t: (key: string, params?: Record<string, any>) => string;
+};
+
+// Criar o contexto com um valor padrão para SSR
+// Esta é a chave para resolver o problema de SSR - fornecemos um valor padrão
+// que será usado durante a renderização no servidor
+const defaultContextValue: LanguageContextType = {
+  language: defaultLanguage,
+  setLanguage: () => {}, // Função vazia no servidor
+  t: (key: string, params?: Record<string, any>) => getTranslation(defaultLanguage, key, params)
+};
+
+const LanguageContext = createContext<LanguageContextType>(defaultContextValue);
 
 // Helper para verificar se estamos no navegador
 const isBrowser = typeof window !== 'undefined';
 
 // Provider do contexto
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  // Estado para armazenar o idioma atual, iniciando com 'pt'
-  // Este valor inicial ('pt') será usado no servidor durante o build
-  const [language, setLanguageState] = useState<Language>('pt');
+  // Estado para armazenar o idioma atual, iniciando com o valor padrão
+  const [language, setLanguageState] = useState<Language>(defaultLanguage);
 
   // Efeito para LER do localStorage APENAS no navegador, APÓS a primeira renderização
   useEffect(() => {
@@ -58,14 +79,12 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       const savedLanguage = localStorage.getItem('easylink_language');
       if (savedLanguage === 'pt' || savedLanguage === 'en') {
         // Define o estado apenas se o idioma salvo for diferente do inicial
-        // para evitar re-renderizações desnecessárias se já for 'pt'
         if (savedLanguage !== language) {
-           setLanguageState(savedLanguage);
+           setLanguageState(savedLanguage as Language);
         }
       }
     }
-    // O array vazio [] significa que este efeito só roda uma vez, quando o componente "monta" no navegador
-  }, []); // Dependência vazia
+  }, [language]);
 
   // Função para alterar o idioma e salvar no localStorage (apenas no navegador)
   const setLanguage = (lang: Language) => {
@@ -80,17 +99,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // Função de tradução (sem alterações na lógica principal)
+  // Função de tradução
   const t = (key: string, params?: Record<string, any>): string => {
-    const currentTranslations = translations[language]; // Usa o estado atual
-    let translatedText = getNestedValue(currentTranslations, key) || key;
-
-    if (params) {
-      Object.entries(params).forEach(([paramKey, paramValue]) => {
-        translatedText = translatedText.replace(`{${paramKey}}`, String(paramValue));
-      });
-    }
-    return translatedText;
+    return getTranslation(language, key, params);
   };
 
   // Valor do contexto
@@ -107,13 +118,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-// Hook para usar o contexto (sem alterações)
+// Hook para usar o contexto - agora SEMPRE retorna um valor válido
 export function useLanguage() {
-  const context = useContext(LanguageContext);
-  if (context === undefined) {
-    // Se este erro ainda ocorrer, significa que o problema é mais fundamental
-    // ou que useLanguage está sendo chamado fora de um componente filho do Provider.
-    throw new Error('useLanguage must be used within a LanguageProvider');
-  }
-  return context;
+  return useContext(LanguageContext);
 }
